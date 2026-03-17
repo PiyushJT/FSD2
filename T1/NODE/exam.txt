@@ -1,0 +1,4 @@
+exam attend
+Entry 1: Pass
+Entry 2: Fail
+Entry 3: Pass
