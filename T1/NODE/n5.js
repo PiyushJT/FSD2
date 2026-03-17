@@ -5,9 +5,9 @@ var fs = require("fs");
 
 fs.writeFileSync("exam.txt", "exam attend");
 
-fs.appendFileSync("exam.txt", "\nEntry 1: Pass");
-fs.appendFileSync("exam.txt", "\nEntry 2: Fail");
-fs.appendFileSync("exam.txt", "\nEntry 3: Pass");
+fs.appendFileSync("exam.txt", "\nEntry 1: Pass ");
+fs.appendFileSync("exam.txt", "\nEntry 2: Fail ");
+fs.appendFileSync("exam.txt", "\nEntry 3: Pass ");
 
 console.log("File exam.txt created and entries added.");
 
