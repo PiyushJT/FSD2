@@ -1,1729 +1,2143 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Python Programs — VS Code IDE</title>
-  <link rel="icon" href="https://raw.githubusercontent.com/PiyushJT/PiyushJT/00ca33b80496d6ca543332f53b314e62ddf3e37b/icons/python.svg" type="image/svg+xml">
-  <meta name="description" content="Browse and search the Python-Material GitHub repository">
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Segoe+UI:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      /* VS Code Dark+ color palette */
-      --vsc-bg:           #1e1e1e;
-      --vsc-sidebar:      #252526;
-      --vsc-activity:     #333333;
-      --vsc-titlebar:     #3c3c3c;
-      --vsc-tab-active:   #1e1e1e;
-      --vsc-tab-inactive: #2d2d2d;
-      --vsc-tab-border:   #252526;
-      --vsc-statusbar:    #007acc;
-      --vsc-statusbar-fg: #ffffff;
-      --vsc-panel:        #1e1e1e;
-      --vsc-panel-header: #252526;
-      --vsc-border:       #3c3c3c;
-      --vsc-border-light: #454545;
-      --vsc-hover:        rgba(255,255,255,0.06);
-      --vsc-selected:     #094771;
-      --vsc-focused:      #0d6199;
-      --vsc-input-bg:     #3c3c3c;
-      --vsc-input-border: #3c3c3c;
-      --vsc-input-focus:  #007acc;
-      --vsc-scrollbar:    rgba(121,121,121,0.4);
-      --vsc-scrollbar-h:  rgba(121,121,121,0.7);
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Python Programs</title>
+    <link rel="icon" href="https://avatars.githubusercontent.com/u/175926715?v=4">
+    <link rel="icon" href="https://avatars.githubusercontent.com/u/175926715?v=4">
+    <meta name="description" content="Browse and search the  GitHub repository">
+    <style>
+      :root {
+        /* Darker, richer base with subtle depth */
+        --bg: #0b0d10;                /* page background */
+        --bg-elev: linear-gradient(180deg,#0f1114 0%, #0b0d10 100%);
+        --panel: rgba(18,20,24,0.7);  /* semi-opaque panels */
+        --panel-2: rgba(255,255,255,0.02); /* hover panel overlay */
+        --text: #e6eef8;             /* primary text (cool white) */
+        --muted: #9fb0c8;            /* muted (desaturated blue) */
+        --accent: #60a5fa;           /* primary accent (soft blue) */
+        --accent-2: #7dd3fc;         /* secondary accent (cyan) */
+        --accent-gradient: linear-gradient(90deg,#60a5fa,#7dd3fc);
+        --danger: #ff7b72;           /* warm danger */
+        --border: rgba(255,255,255,0.04); /* subtle light borders */
+        --shadow: 0 8px 30px rgba(3,6,12,0.6); /* deeper shadow for panels */
+        --glass: rgba(255,255,255,0.03);
+        --scrollbar-track: rgba(255,255,255,0.02);
+  --scrollbar-thumb: rgba(125,211,252,0.14);
+  --copied-color: #a3e635; /* lime-ish */
+  --mobile-header-height: 58px;
+      }
 
-      /* Token colors */
-      --tok-fg:        #d4d4d4;
-      --tok-comment:   #6a9955;
-      --tok-string:    #ce9178;
-      --tok-keyword:   #569cd6;
-      --tok-builtin:   #dcdcaa;
-      --tok-number:    #b5cea8;
-      --tok-decorator: #c586c0;
-      --tok-defname:   #4ec9b0;
-      --tok-classname: #4ec9b0;
-      --tok-operator:  #d4d4d4;
-      --tok-type:      #4ec9b0;
+      html, body {
+        height: 100%;
+        background: var(--bg);
+      }
 
-      /* Accents */
-      --blue:    #007acc;
-      --blue-lt: #3794ff;
-      --green:   #4ec9b0;
-      --orange:  #ce9178;
-      --purple:  #c586c0;
-      --yellow:  #dcdcaa;
-      --red:     #f44747;
-      --cyan:    #4fc1ff;
+      /* Scrollbar styling: Firefox and WebKit/Blink */
+      /* Firefox */
+      * { scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track); }
 
-      --activity-w: 48px;
-      --sidebar-w: 260px;
-      --statusbar-h: 22px;
-      --tabbar-h: 35px;
-      --titlebar-h: 30px;
-      --mobile-header-h: 44px;
-    }
+      /* WebKit */
+      ::-webkit-scrollbar { width: 12px; height: 12px; }
+      ::-webkit-scrollbar-track { background: var(--scrollbar-track); border-radius: 999px; }
+      ::-webkit-scrollbar-thumb {
+        background: var(--scrollbar-thumb);
+        border-radius: 999px;
+        border: 3px solid transparent; /* creates padding inside thumb */
+        background-clip: padding-box;
+      }
+      ::-webkit-scrollbar-thumb:hover { background: rgba(125,211,252,0.2); }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        margin: 0;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        background: var(--bg);
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
 
-    html, body {
-      height: 100%;
-      background: var(--vsc-bg);
-      color: var(--tok-fg);
-      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 13px;
-      -webkit-font-smoothing: antialiased;
-      overflow: hidden;
-    }
+      /* Cool animated background for home */
+      body.home {
+        background: radial-gradient(800px 500px at 10% 10%, rgba(96,165,250,0.06) 0%, transparent 20%),
+                    radial-gradient(700px 400px at 85% 20%, rgba(125,211,252,0.04), transparent 30%),
+                    var(--bg-elev);
+        background-attachment: fixed;
+        position: relative;
+      }
 
-    /* ─── Scrollbar ─── */
-    * { scrollbar-width: thin; scrollbar-color: var(--vsc-scrollbar) transparent; }
-    ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--vsc-scrollbar); border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--vsc-scrollbar-h); }
+      body.home::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: radial-gradient(circle at 10% 10%, rgba(125,211,252,0.02), transparent 15%), radial-gradient(circle at 90% 20%, rgba(96,165,250,0.02), transparent 20%);
+        opacity: 0.9;
+        pointer-events: none;
+        animation: drift 24s linear infinite;
+      }
 
-    /* ═══════════════════════════════════════
-       LAYOUT SHELL
-    ═══════════════════════════════════════ */
-    #ide {
-      display: grid;
-      grid-template-rows: var(--titlebar-h) 1fr var(--statusbar-h);
-      grid-template-columns: var(--activity-w) var(--sidebar-w) 1fr;
-      grid-template-areas:
-        "titlebar titlebar titlebar"
-        "activity sidebar editor"
-        "statusbar statusbar statusbar";
-      height: 100dvh;
-      width: 100vw;
-    }
+      @keyframes drift {
+        0% { transform: translate3d(0,0,0); }
+        100% { transform: translate3d(40px, 0, 0); }
+      }
 
-    /* hide preinit flash */
-    body.preinit #ide { opacity: 0; }
-
-    /* ─── Title Bar ─── */
-    #titlebar {
-      grid-area: titlebar;
-      background: var(--vsc-titlebar);
-      border-bottom: 1px solid #252526;
-      display: flex;
-      align-items: center;
-      padding: 0 12px;
-      gap: 12px;
-      user-select: none;
-      position: relative;
-      z-index: 100;
-    }
-
-    .titlebar-logo {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-    }
-    .titlebar-logo img { width: 16px; height: 16px; }
-    .titlebar-logo .name {
-      font-size: 12px;
-      color: rgba(255,255,255,0.6);
-      letter-spacing: 0.3px;
-    }
-    .titlebar-logo .name strong { color: rgba(255,255,255,0.9); font-weight: 500; }
-
-    .titlebar-menus {
-      display: flex;
-      align-items: center;
-      gap: 0;
-      margin-left: 6px;
-    }
-    .menu-item {
-      padding: 3px 10px;
-      font-size: 12px;
-      color: rgba(255,255,255,0.7);
-      cursor: pointer;
-      border-radius: 4px;
-      transition: background 0.1s;
-    }
-    .menu-item:hover { background: rgba(255,255,255,0.08); color: #fff; }
-
-    .titlebar-search {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-    }
-    .titlebar-search-inner {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 4px;
-      padding: 2px 10px;
-      min-width: 280px;
-      max-width: 420px;
-      width: 100%;
-      cursor: pointer;
-      transition: border-color 0.15s, background 0.15s;
-    }
-    .titlebar-search-inner:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
-    .titlebar-search-inner input {
-      background: transparent;
-      border: none;
-      outline: none;
-      color: rgba(255,255,255,0.8);
-      font-size: 12px;
-      width: 100%;
-      font-family: inherit;
-    }
-    .titlebar-search-inner input::placeholder { color: rgba(255,255,255,0.35); }
-    .titlebar-search-inner svg { flex-shrink: 0; opacity: 0.5; }
-
-    .titlebar-actions {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      margin-left: auto;
-    }
-    .titlebar-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 3px 10px;
-      border-radius: 3px;
-      background: transparent;
-      border: none;
-      color: rgba(255,255,255,0.7);
-      font-size: 11px;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background 0.1s;
-    }
-    .titlebar-btn:hover { background: rgba(255,255,255,0.08); color: #fff; }
-    .titlebar-btn svg { opacity: 0.8; }
-
-    /* ─── Activity Bar ─── */
-    #activity {
-      grid-area: activity;
-      background: var(--vsc-activity);
-      border-right: 1px solid var(--vsc-border);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 4px 0;
-      gap: 2px;
-      z-index: 10;
-    }
-
-    .act-btn {
-      width: 48px;
-      height: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: rgba(255,255,255,0.45);
-      border-left: 2px solid transparent;
-      transition: color 0.12s;
-      position: relative;
-    }
-    .act-btn:hover { color: rgba(255,255,255,0.8); }
-    .act-btn.active { color: #fff; border-left-color: #fff; }
-    .act-btn svg { width: 24px; height: 24px; }
-    .act-btn .badge {
-      position: absolute;
-      top: 8px; right: 8px;
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--blue);
-    }
-
-    .act-bottom { margin-top: auto; }
-
-    /* ─── Sidebar ─── */
-    #sidebar {
-      grid-area: sidebar;
-      background: var(--vsc-sidebar);
-      border-right: 1px solid var(--vsc-border);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      z-index: 5;
-      transition: width 0.15s ease;
-    }
-
-    #sidebar.collapsed { width: 0; border-right: none; }
-
-    .sidebar-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 8px 12px 6px 20px;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.5);
-      flex-shrink: 0;
-    }
-    .sidebar-header-btn {
-      background: none;
-      border: none;
-      color: rgba(255,255,255,0.4);
-      cursor: pointer;
-      padding: 2px 4px;
-      border-radius: 3px;
-      display: flex;
-    }
-    .sidebar-header-btn:hover { color: #fff; background: rgba(255,255,255,0.06); }
-
-    .sidebar-section {
-      padding: 6px 12px 3px 20px;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.4);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-      user-select: none;
-    }
-    .sidebar-section:hover { color: rgba(255,255,255,0.7); }
-    .sidebar-section svg { transition: transform 0.15s; }
-    .sidebar-section.open svg { transform: rotate(90deg); }
-
-    .sidebar-tree {
-      overflow-y: auto;
-      flex: 1;
-      padding-bottom: 8px;
-    }
-
-    .tree-item {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      padding: 3px 8px 3px 0;
-      cursor: pointer;
-      color: var(--tok-fg);
-      border-radius: 0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      position: relative;
-      font-size: 13px;
-      line-height: 22px;
-      user-select: none;
-    }
-    .tree-item:hover { background: var(--vsc-hover); }
-    .tree-item.active { background: var(--vsc-selected) !important; }
-    .tree-item.focused { background: var(--vsc-focused) !important; }
-    .tree-item .ti-indent { flex-shrink: 0; }
-    .tree-item .ti-arrow {
-      width: 16px; height: 16px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-      color: rgba(255,255,255,0.4);
-      transition: transform 0.12s;
-    }
-    .tree-item .ti-arrow.open { transform: rotate(90deg); }
-    .tree-item .ti-arrow svg { width: 14px; height: 14px; }
-    .tree-item .ti-icon { width: 16px; height: 16px; flex-shrink: 0; }
-    .tree-item .ti-icon img { width: 16px; height: 16px; object-fit: contain; }
-    .tree-item .ti-name {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      flex: 1;
-      min-width: 0;
-    }
-
-    /* Sidebar search */
-    .sidebar-search-wrap {
-      padding: 8px 12px;
-      flex-shrink: 0;
-    }
-    .sidebar-search-input {
-      width: 100%;
-      background: var(--vsc-input-bg);
-      border: 1px solid var(--vsc-input-border);
-      border-radius: 3px;
-      padding: 4px 8px;
-      color: var(--tok-fg);
-      font-size: 13px;
-      font-family: inherit;
-      outline: none;
-      transition: border-color 0.12s;
-    }
-    .sidebar-search-input:focus { border-color: var(--vsc-input-focus); }
-    .sidebar-search-input::placeholder { color: rgba(255,255,255,0.3); }
-
-    /* ─── Editor Area ─── */
-    #editor-area {
-      grid-area: editor;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      background: var(--vsc-bg);
-    }
-
-    /* Tab Bar */
-    #tabbar {
-      height: var(--tabbar-h);
-      background: var(--vsc-panel-header);
-      border-bottom: 1px solid var(--vsc-border);
-      display: flex;
-      align-items: stretch;
-      overflow-x: auto;
-      overflow-y: hidden;
-      flex-shrink: 0;
-    }
-    #tabbar::-webkit-scrollbar { height: 2px; }
-
-    .tab {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      padding: 0 12px;
-      background: var(--vsc-tab-inactive);
-      border-right: 1px solid var(--vsc-tab-border);
-      cursor: pointer;
-      font-size: 13px;
-      color: rgba(255,255,255,0.5);
-      min-width: 120px;
-      max-width: 200px;
-      white-space: nowrap;
-      overflow: hidden;
-      flex-shrink: 0;
-      position: relative;
-      user-select: none;
-      transition: background 0.1s;
-    }
-    .tab:hover { background: rgba(255,255,255,0.04); }
-    .tab.active {
-      background: var(--vsc-tab-active);
-      color: #fff;
-      border-top: 1px solid var(--blue);
-    }
-    .tab .tab-icon { width: 14px; height: 14px; flex-shrink: 0; }
-    .tab .tab-icon img { width: 14px; height: 14px; }
-    .tab .tab-name { flex: 1; overflow: hidden; text-overflow: ellipsis; font-size: 12px; }
-    .tab .tab-close {
-      width: 18px; height: 18px;
-      border-radius: 3px;
-      display: flex; align-items: center; justify-content: center;
-      opacity: 0;
-      flex-shrink: 0;
-      transition: opacity 0.1s, background 0.1s;
-    }
-    .tab:hover .tab-close, .tab.active .tab-close { opacity: 0.7; }
-    .tab .tab-close:hover { background: rgba(255,255,255,0.15); opacity: 1; }
-    .tab .tab-close svg { width: 10px; height: 10px; }
-
-    /* Breadcrumbs */
-    #breadcrumbs {
-      height: 26px;
-      background: var(--vsc-bg);
-      border-bottom: 1px solid var(--vsc-border);
-      display: flex;
-      align-items: center;
-      padding: 0 14px;
-      gap: 2px;
-      font-size: 12px;
-      color: rgba(255,255,255,0.5);
-      flex-shrink: 0;
-      overflow: hidden;
-      white-space: nowrap;
-    }
-    .crumb {
-      display: flex;
-      align-items: center;
-      gap: 2px;
-      cursor: pointer;
-      padding: 1px 4px;
-      border-radius: 3px;
-      color: rgba(255,255,255,0.55);
-      transition: color 0.1s, background 0.1s;
-    }
-    .crumb:hover { color: #fff; background: rgba(255,255,255,0.06); }
-    .crumb-sep { opacity: 0.3; margin: 0 1px; }
-    .crumb img { width: 12px; height: 12px; margin-right: 3px; }
-
-    /* Editor Content */
-    #editor-content {
-      flex: 1;
-      overflow: auto;
-      position: relative;
-    }
-
-    /* ─── Home / Welcome Screen ─── */
-    .welcome-screen {
-      display: grid;
-      place-items: center;
-      height: 100%;
-      background: var(--vsc-bg);
-      padding: 20px;
-    }
-    .welcome-inner {
-      max-width: 700px;
-      width: 100%;
-    }
-    .welcome-logo {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 28px;
-    }
-    .welcome-logo img { width: 52px; height: 52px; }
-    .welcome-logo-text h1 {
-      font-size: 28px;
-      font-weight: 300;
-      color: #fff;
-      letter-spacing: -0.5px;
-    }
-    .welcome-logo-text p {
-      font-size: 13px;
-      color: rgba(255,255,255,0.45);
-      margin-top: 3px;
-    }
-
-    .welcome-search-wrap {
-      position: relative;
-      margin-bottom: 24px;
-    }
-    .welcome-search-input {
-      width: 100%;
-      background: #2d2d2d;
-      border: 1px solid #3c3c3c;
-      border-radius: 5px;
-      padding: 14px 18px 14px 46px;
-      color: var(--tok-fg);
-      font-size: 15px;
-      font-family: 'JetBrains Mono', monospace;
-      outline: none;
-      transition: border-color 0.15s, box-shadow 0.15s;
-    }
-    .welcome-search-input:focus {
-      border-color: var(--blue);
-      box-shadow: 0 0 0 2px rgba(0,122,204,0.25);
-    }
-    .welcome-search-input::placeholder { color: rgba(255,255,255,0.22); }
-    .welcome-search-icon {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: rgba(255,255,255,0.3);
-      pointer-events: none;
-    }
-    .welcome-clear-btn {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: rgba(255,255,255,0.4);
-      cursor: pointer;
-      padding: 4px;
-      border-radius: 3px;
-      display: none;
-      align-items: center;
-    }
-    .welcome-clear-btn:hover { color: #fff; background: rgba(255,255,255,0.08); }
-
-    .welcome-actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-    .welcome-btn {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 16px;
-      border-radius: 5px;
-      background: #2d2d2d;
-      border: 1px solid #3c3c3c;
-      color: var(--tok-fg);
-      cursor: pointer;
-      font-size: 13px;
-      font-family: inherit;
-      transition: background 0.12s, border-color 0.12s;
-      text-decoration: none;
-    }
-    .welcome-btn:hover { background: #383838; border-color: #4c4c4c; }
-    .welcome-btn .wb-icon {
-      width: 28px; height: 28px;
-      border-radius: 5px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-    .welcome-btn .wb-text strong { display: block; font-size: 13px; font-weight: 500; color: #fff; }
-    .welcome-btn .wb-text span { font-size: 11px; color: rgba(255,255,255,0.4); }
-
-    .welcome-btn.primary .wb-icon { background: rgba(0,122,204,0.25); }
-    .welcome-btn.primary:hover { border-color: var(--blue); }
-    .welcome-btn.secondary .wb-icon { background: rgba(78,201,176,0.2); }
-    .welcome-btn.tertiary .wb-icon { background: rgba(197,134,192,0.2); }
-
-    .welcome-quiz-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      width: 100%;
-      padding: 13px;
-      border-radius: 5px;
-      background: rgba(78,201,176,0.1);
-      border: 1px solid rgba(78,201,176,0.3);
-      color: #4ec9b0;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
-      font-family: inherit;
-      text-decoration: none;
-      transition: background 0.12s, border-color 0.12s;
-    }
-    .welcome-quiz-btn:hover { background: rgba(78,201,176,0.18); border-color: rgba(78,201,176,0.55); }
-
-    /* ─── Folder View ─── */
-    .folder-view {
-      padding: 12px;
-    }
-    .folder-header {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: rgba(255,255,255,0.35);
-      padding: 8px 4px 12px 4px;
-      font-weight: 600;
-    }
-    .folder-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      gap: 8px;
-    }
-    .folder-card {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      padding: 10px 12px;
-      background: #252526;
-      border: 1px solid #3c3c3c;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.12s, border-color 0.12s;
-      overflow: hidden;
-    }
-    .folder-card:hover { background: #2a2d2e; border-color: var(--blue); }
-    .folder-card img { width: 18px; height: 18px; flex-shrink: 0; }
-    .folder-card span { font-size: 12px; color: var(--tok-fg); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-    /* ─── Code Viewer ─── */
-    .code-viewer {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      background: var(--vsc-bg);
-      font-family: 'JetBrains Mono', 'Courier New', monospace;
-    }
-
-    .viewer-toolbar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 14px;
-      background: var(--vsc-bg);
-      border-bottom: 1px solid var(--vsc-border);
-      flex-shrink: 0;
-      flex-wrap: wrap;
-    }
-    .viewer-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 12px;
-      background: #2d2d2d;
-      border: 1px solid #3c3c3c;
-      border-radius: 3px;
-      color: rgba(255,255,255,0.8);
-      font-size: 12px;
-      font-family: 'Segoe UI', sans-serif;
-      cursor: pointer;
-      transition: background 0.1s, border-color 0.1s;
-      line-height: 1;
-    }
-    .viewer-btn:hover { background: #3c3c3c; border-color: #555; }
-    .viewer-btn:active { background: #1e1e1e; }
-    .viewer-btn.copied { color: #4ec9b0; border-color: rgba(78,201,176,0.5); }
-    .viewer-btn svg { width: 14px; height: 14px; opacity: 0.85; }
-
-    .nav-spacer { flex: 1; }
-
-    /* Problem Statement */
-    .problem-panel {
-      background: rgba(0,122,204,0.06);
-      border-left: 3px solid var(--blue);
-      border-radius: 0 3px 3px 0;
-      padding: 14px 18px;
-      margin: 14px 14px 0 14px;
-      flex-shrink: 0;
-      font-family: 'Segoe UI', sans-serif;
-    }
-    .problem-title {
-      font-size: 10px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--blue-lt);
-      margin-bottom: 8px;
-    }
-    .problem-text {
-      font-size: 13px;
-      color: rgba(255,255,255,0.75);
-      line-height: 1.7;
-      white-space: pre-wrap;
-    }
-
-    /* Code Block */
-    .code-scroll {
-      flex: 1;
-      overflow: auto;
-      padding: 14px 0;
-    }
-    .code-block {
-      display: table;
-      width: 100%;
-      min-width: 100%;
-    }
-    .code-line {
-      display: table-row;
-    }
-    .code-line:hover .ln, .code-line:hover .lc { background: rgba(255,255,255,0.03); }
-    .ln {
-      display: table-cell;
-      padding: 0 16px 0 12px;
-      text-align: right;
-      color: rgba(255,255,255,0.2);
-      font-size: 13px;
-      line-height: 20px;
-      user-select: none;
-      border-right: 1px solid rgba(255,255,255,0.05);
-      min-width: 50px;
-      white-space: nowrap;
-      vertical-align: top;
-    }
-    .lc {
-      display: table-cell;
-      padding: 0 18px 0 14px;
-      font-size: 13px;
-      line-height: 20px;
-      white-space: pre-wrap;
-      word-break: break-word;
-      color: var(--tok-fg);
-      vertical-align: top;
-    }
-
-    /* Output Panel */
-    .output-panel {
-      background: #1a1a1a;
-      border-top: 1px solid var(--vsc-border);
-      flex-shrink: 0;
-    }
-    .output-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 5px 14px;
-      background: var(--vsc-panel-header);
-      border-bottom: 1px solid var(--vsc-border);
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: rgba(255,255,255,0.6);
-    }
-    .output-dot { width: 6px; height: 6px; border-radius: 50%; background: #4ec9b0; }
-    .output-body {
-      padding: 10px 14px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      color: #4ec9b0;
-      line-height: 1.6;
-      white-space: pre-wrap;
-      max-height: 180px;
-      overflow-y: auto;
-    }
-
-    /* Nav Row */
-    .nav-row {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 14px;
-      flex-shrink: 0;
-      background: var(--vsc-bg);
-      border-top: 1px solid var(--vsc-border);
-    }
-
-    /* ─── Search Results ─── */
-    .search-view {
-      padding: 12px;
-      font-family: 'Segoe UI', sans-serif;
-    }
-    .search-header {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: rgba(255,255,255,0.35);
-      padding: 4px 0 10px 2px;
-      font-weight: 600;
-    }
-    .search-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 9px;
-      padding: 8px 10px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background 0.1s;
-      margin-bottom: 2px;
-    }
-    .search-item:hover { background: rgba(255,255,255,0.05); }
-    .search-item .si-icon { width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px; }
-    .search-item .si-icon img { width: 16px; height: 16px; }
-    .search-item .si-path {
-      font-size: 12px;
-      color: rgba(255,255,255,0.65);
-      font-family: 'JetBrains Mono', monospace;
-    }
-    .search-item .si-path .hl {
-      background: rgba(255,200,0,0.25);
-      border-bottom: 1px solid rgba(255,200,0,0.5);
-      border-radius: 2px;
-      padding: 0 1px;
-      color: #ffd700;
-    }
-    .search-item .si-snippet {
-      font-size: 11px;
-      color: rgba(255,255,255,0.38);
-      margin-top: 3px;
-      font-family: 'JetBrains Mono', monospace;
-    }
-    .search-item .si-snippet .hl {
-      background: rgba(255,200,0,0.2);
-      border-radius: 2px;
-      padding: 0 1px;
-      color: #ffd700;
-    }
-    .search-empty { color: rgba(255,255,255,0.3); font-size: 13px; padding: 20px 4px; }
-
-    /* Progress */
-    .progress-wrap {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 2px 14px 2px;
-      color: rgba(255,255,255,0.35);
-      font-size: 11px;
-    }
-    .progress-bar {
-      flex: 1;
-      height: 2px;
-      background: rgba(255,255,255,0.08);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-    .progress-fill {
-      height: 100%;
-      width: 0%;
-      background: var(--blue);
-      transition: width 0.1s linear;
-    }
-
-    /* ─── Status Bar ─── */
-    #statusbar {
-      grid-area: statusbar;
-      background: var(--vsc-statusbar);
-      color: var(--vsc-statusbar-fg);
-      display: flex;
-      align-items: center;
-      gap: 0;
-      font-size: 11px;
-      height: var(--statusbar-h);
-      z-index: 100;
-      user-select: none;
-    }
-    .sb-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 0 10px;
-      height: 100%;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: background 0.1s;
-    }
-    .sb-item:hover { background: rgba(255,255,255,0.12); }
-    .sb-item svg { width: 12px; height: 12px; }
-    .sb-right { margin-left: auto; display: flex; align-items: center; }
-
-    /* ─── Syntax Tokens ─── */
-    .tok-comment  { color: var(--tok-comment); font-style: italic; }
-    .tok-string   { color: var(--tok-string); }
-    .tok-keyword  { color: var(--tok-keyword); }
-    .tok-builtin  { color: var(--tok-builtin); }
-    .tok-number   { color: var(--tok-number); }
-    .tok-decorator{ color: var(--tok-decorator); }
-    .tok-defname  { color: var(--tok-defname); }
-    .tok-classname{ color: var(--tok-classname); }
-
-    /* ─── Minimap (decorative) ─── */
-    .minimap {
-      width: 80px;
-      flex-shrink: 0;
-      background: rgba(0,0,0,0.2);
-      border-left: 1px solid var(--vsc-border);
-      overflow: hidden;
-      position: relative;
-    }
-    .minimap-lines {
-      padding: 8px 6px;
-      opacity: 0.35;
-    }
-    .minimap-line {
-      height: 2px;
-      border-radius: 1px;
-      margin-bottom: 1px;
-      background: rgba(255,255,255,0.3);
-    }
-    .minimap-viewport {
-      position: absolute;
-      left: 0; right: 0;
-      height: 80px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
-      top: 8px;
-    }
-
-    /* ─── Mobile ─── */
-    @media (max-width: 900px) {
-      :root { --sidebar-w: 0px; --activity-w: 0px; }
-      #ide {
+      /* Hide chrome and flatten layout on home */
+      body.home .app {
         grid-template-columns: 1fr;
-        grid-template-rows: var(--mobile-header-h) 1fr var(--statusbar-h);
         grid-template-areas:
-          "titlebar"
-          "editor"
-          "statusbar";
+          "main";
+        height: 100vh;
+        overflow: hidden;
       }
-      #activity, #sidebar { display: none; }
-      .titlebar-menus { display: none; }
-      .welcome-actions { grid-template-columns: 1fr; }
-      .minimap { display: none; }
-    }
+      body.home header,
+      body.home aside.sidebar,
+      body.home .crumbs {
+        display: none;
+      }
+      body.home main.content {
+        padding: 0;
+        height: 100vh;
+        overflow: hidden;
+      }
+      body.home #panel {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        height: 100%;
+        overflow: hidden;
+      }
 
-    /* ─── Scrollbar in code ─── */
-    .code-scroll::-webkit-scrollbar { width: 10px; height: 10px; }
-    .code-scroll::-webkit-scrollbar-track { background: var(--vsc-bg); }
-    .code-scroll::-webkit-scrollbar-thumb { background: rgba(121,121,121,0.35); }
-  </style>
-</head>
-<body class="preinit">
+      .app {
+        display: grid;
+        grid-template-rows: auto 1fr;
+        grid-template-columns: 280px 1fr;
+        grid-template-areas:
+          "header header"
+          "sidebar main";
+        height: 100dvh;
+        transition: opacity .2s ease;
+      }
 
-<!-- ═══════════════════════════ IDE SHELL ═══════════════════════════ -->
-<div id="ide">
+      /* Hide the app until first render to avoid layout flash */
+      body.preinit .app { opacity: 0; pointer-events: none; }
 
-  <!-- TITLE BAR -->
-  <div id="titlebar">
-    <div class="titlebar-logo">
-      <img src="https://raw.githubusercontent.com/PiyushJT/PiyushJT/00ca33b80496d6ca543332f53b314e62ddf3e37b/icons/python.svg" alt="Python">
-      <span class="name"><strong>Python Programs</strong> — VS Code</span>
-    </div>
-    <div class="titlebar-menus">
-      <div class="menu-item">File</div>
-      <div class="menu-item">Edit</div>
-      <div class="menu-item">View</div>
-      <div class="menu-item">Go</div>
-      <div class="menu-item">Run</div>
-    </div>
-    <div class="titlebar-search">
-      <div class="titlebar-search-inner" id="titleSearchTrigger">
-        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        <input id="titleSearchInput" type="search" placeholder="Search files, problems, code…" autocomplete="off"/>
-      </div>
-    </div>
-    <div class="titlebar-actions">
-      <a class="titlebar-btn" href="https://github.com/dwarkesh777/FSD2" target="_blank" rel="noopener">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12.02c0 5.09 3.29 9.4 7.86 10.93.58.11.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.53-1.35-1.3-1.7-1.3-1.7-1.06-.73.08-.72.08-.72 1.17.08 1.78 1.2 1.78 1.2 1.04 1.78 2.74 1.27 3.4.98.11-.75.41-1.26.75-1.55-2.55-.29-5.23-1.28-5.23-5.71 0-1.26.45-2.29 1.2-3.09-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 2.9-.39c.99 0 1.99.13 2.92.39 2.2-1.49 3.17-1.18 3.17-1.18.64 1.59.24 2.77.12 3.06.75.8 1.2 1.83 1.2 3.09 0 4.44-2.69 5.41-5.25 5.69.42.37.8 1.1.8 2.22 0 1.6-.01 2.88-.01 3.27 0 .31.21.68.8.56A10.53 10.53 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
-        GitHub
-      </a>
-    </div>
-  </div>
+      header {
+        transition: transform 220ms cubic-bezier(.2,.8,.2,1);
+        grid-area: header;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 14px 18px;
+        background: #0b0d10;
+        border-bottom: 1px solid rgba(255,255,255,0.03);
+      }
 
-  <!-- ACTIVITY BAR -->
-  <div id="activity">
-    <div class="act-btn active" id="actExplorer" title="Explorer">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7c0-1.1.9-2 2-2h5l2 2h7a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg>
-    </div>
-    <div class="act-btn" id="actSearch" title="Search">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    </div>
-    <div class="act-btn" id="actGit" title="Source Control">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="9" r="2"/><path d="M6 8v8M6 8c0-2 2-3 4-3h2a4 4 0 0 0 4-4"/><path d="M18 9v2a4 4 0 0 1-4 4H8"/></svg>
-    </div>
-    <div class="act-btn act-bottom" title="Settings">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v3M12 20v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M1 12h3M20 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
-    </div>
-  </div>
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        white-space: nowrap;
+      }
 
-  <!-- SIDEBAR -->
-  <div id="sidebar">
-    <div class="sidebar-header">
-      <span id="sidebarTitle">Explorer</span>
-      <button class="sidebar-header-btn" id="collapseBtn" title="Close sidebar">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
-      </button>
-    </div>
+      .brand .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--accent-2);
+        box-shadow: 0 0 8px rgba(96,165,250,0.18);
+      }
 
-    <!-- Explorer mode -->
-    <div id="explorerPanel">
-      <div class="sidebar-section open" id="sidebarSection">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5l8 7-8 7"/></svg>
-        <span id="sectionLabel">PYTHON-MATERIAL</span>
-      </div>
-      <div class="sidebar-tree" id="sidebarTree"></div>
-    </div>
+      .brand .title {
+        font-weight: 700;
+        letter-spacing: 0.2px;
+      }
 
-    <!-- Search mode -->
-    <div id="searchPanel" style="display:none;flex-direction:column;flex:1;overflow:hidden;">
-      <div class="sidebar-search-wrap">
-        <input class="sidebar-search-input" id="sidebarSearchInput" type="search" placeholder="Search" autocomplete="off"/>
-      </div>
-      <div class="sidebar-tree" id="sidebarSearchResults"></div>
-    </div>
-  </div>
+      .search {
+        flex: 1 1 auto;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        max-width: 900px;
+        margin-left: auto;
+        position: relative; /* for clear button */
+      }
 
-  <!-- EDITOR AREA -->
-  <div id="editor-area">
-    <!-- Tab Bar -->
-    <div id="tabbar"><div id="tabsContainer"></div></div>
-    <!-- Breadcrumbs -->
-    <div id="breadcrumbs"></div>
-    <!-- Content -->
-    <div id="editor-content"></div>
-  </div>
+      .search input[type="search"] {
+        width: 100%;
+        padding: 12px 14px 12px 40px;
+        background: rgba(255,255,255,0.02);
+        color: var(--text);
+        border: 1px solid rgba(255,255,255,0.03);
+        border-radius: 12px;
+        outline: none;
+        transition: border-color .16s ease, box-shadow .16s ease, transform .12s ease;
+        box-shadow: inset 0 2px 8px rgba(3,6,12,0.6);
+      }
 
-  <!-- STATUS BAR -->
-  <div id="statusbar">
-    <div class="sb-item" id="sbBranch">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="9" r="2"/><path d="M6 8v8"/><path d="M18 9c0-3-3-4-6-2L6 8"/></svg>
-      main
-    </div>
-    <div class="sb-item" id="sbStatus">⚡ Loading…</div>
-    <div class="sb-right">
-      <div class="sb-item" id="sbLang">Python</div>
-      <div class="sb-item" id="sbEnc">UTF-8</div>
-      <div class="sb-item" id="sbLines">Ln 1, Col 1</div>
-    </div>
-  </div>
+      /* Hide native clear (X) */
+      input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; height: 0; width: 0; }
 
-</div>
+      /* Clear button shared styles */
+      .clearBtn {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        border: 1px solid transparent;
+        padding: 4px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: none;
+      }
+  .clearBtn:hover {
+        background: rgba(96,165,250,0.08);
+        /* preserve vertical centering and apply a subtle upward shift on hover */
+        transform: translateY(calc(-50% - 1px));
+      }
+      .clearBtn img { width: 16px; height: 16px; opacity: 0.9; }
 
-<script>
-  const OWNER = "dwarkesh777";
-  const REPO  = "FSD2";
-  const QUIZ_URL = "https://dwarkesh777.github.io/PB-MCQ/";
-  const TICK_SVG = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ec9b0" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`;
+      .search input[type="search"]:focus {
+        border-color: rgba(96,165,250,0.6);
+        box-shadow: 0 0 0 4px rgba(96,165,250,0.12);
+      }
 
-  // ─── State ───────────────────────────────────────────────────────
-  const state = {
-    defaultBranch: "main",
-    nodeByPath: new Map(),
-    contentCache: new Map(),
-    fileIndex: [],
-    programIndex: [],
-    searchAbort: null,
-    prefetchStarted: false,
-    openTabs: [],   // [{path, name}]
-    activeTab: null
-  };
+      .search .icon {
+        position: relative;
+        left: 34px;
+        pointer-events: none;
+        color: var(--muted);
+      }
 
-  // ─── Utils ───────────────────────────────────────────────────────
-  const $ = id => document.getElementById(id);
-  const toQ = p => Object.entries(p).filter(([,v])=>v!=null&&v!=='').map(([k,v])=>`${k}=${encodeURIComponent(v)}`).join('&');
-  const parseLocation = () => {
-    const u = new URLSearchParams(location.search);
-    return { view: u.get('view')||'home', path: u.get('p')||'', q: u.get('q')||'' };
-  };
-  function navigate(ns, replace=false) {
-    const qs = '?'+toQ(ns);
-    replace ? history.replaceState(null,'',location.pathname+qs) : history.pushState(null,'',location.pathname+qs);
-    render();
-  }
-  async function fetchJSON(url) {
-    const r = await fetch(url);
-    if (!r.ok) throw new Error('HTTP '+r.status);
-    return r.json();
-  }
-  function getBasename(p) { return p ? p.split('/').pop() : p; }
-  function getParent(p) { if(!p) return ''; const ps=p.split('/'); ps.pop(); return ps.join('/'); }
-  function iconFor(path, isDir) {
-    if (isDir) return "https://raw.githubusercontent.com/PiyushJT/PiyushJT/1cadac55bb62a80e9bfdc6cc8fb9eefce1d7eee4/icons/folder.svg";
-    const ext = (path.split('.').pop()||'').toLowerCase();
-    const m = {py:'https://raw.githubusercontent.com/PiyushJT/PiyushJT/00ca33b80496d6ca543332f53b314e62ddf3e37b/icons/python.svg',java:'https://raw.githubusercontent.com/PiyushJT/PiyushJT/00ca33b80496d6ca543332f53b314e62ddf3e37b/icons/java.svg',txt:'https://raw.githubusercontent.com/PiyushJT/PiyushJT/00ca33b80496d6ca543332f53b314e62ddf3e37b/icons/txt.svg',csv:'https://raw.githubusercontent.com/PiyushJT/PiyushJT/00ca33b80496d6ca543332f53b314e62ddf3e37b/icons/csv.svg'};
-    return m[ext]||'https://raw.githubusercontent.com/PiyushJT/PiyushJT/00ca33b80496d6ca543332f53b314e62ddf3e37b/icons/file.svg';
-  }
-  function escapeHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-  function hl(text, q) {
-    if (!q) return escapeHtml(text);
-    const esc = q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
-    return escapeHtml(text).replace(new RegExp(esc,'gi'), m=>`<span class="hl">${m}</span>`);
-  }
+      aside.sidebar {
+        grid-area: sidebar;
+        background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0));
+        border-right: 1px solid rgba(255,255,255,0.03);
+        overflow: auto;
+      }
 
-  // ─── Init ────────────────────────────────────────────────────────
-  async function init() {
-    const meta = await fetchJSON(`https://api.github.com/repos/${OWNER}/${REPO}`);
-    state.defaultBranch = meta.default_branch||'main';
-    $('sbBranch').innerHTML = `<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="9" r="2"/><path d="M6 8v8"/><path d="M18 9c0-3-3-4-6-2L6 8"/></svg> ${state.defaultBranch}`;
-    const rootTree = await fetchJSON(`https://api.github.com/repos/${OWNER}/${REPO}/git/trees/${encodeURIComponent(state.defaultBranch)}`);
-    const allEntries = await loadAllEntries(rootTree.tree, '');
-    buildIndexes(allEntries);
-    render(true);
-    document.body.classList.remove('preinit');
-    $('sbStatus').textContent = `✓ ${state.fileIndex.length} files indexed`;
-    if (!state.prefetchStarted) { state.prefetchStarted=true; prefetchSmallFiles().catch(()=>{}); }
-  }
+      .sidebar .section {
+        padding: 14px 14px 8px 14px;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+      }
 
-  async function loadAllEntries(entries, parentPath) {
-    const all = [], trees = [];
-    for (const e of entries) {
-      const fullPath = parentPath ? `${parentPath}/${e.path}` : e.path;
-      const node = { ...e, path: fullPath };
-      all.push(node);
-      if (e.type === 'tree') trees.push(node);
-    }
-    const concurrency = 5;
-    for (let i=0; i<trees.length; i+=concurrency) {
-      const batch = trees.slice(i, i+concurrency);
-      const results = await Promise.all(batch.map(async d => {
-        try {
-          const dt = await fetchJSON(`https://api.github.com/repos/${OWNER}/${REPO}/git/trees/${d.sha}`);
-          return loadAllEntries(dt.tree, d.path);
-        } catch { return []; }
-      }));
-      for (const sub of results) all.push(...sub);
-    }
-    return all;
-  }
+      .sidebar .section.clickable {
+        cursor: pointer;
+        transition: color 0.15s ease;
+      }
 
-  function buildIndexes(allEntries) {
-    const root = { type:'tree', name:'', path:'', children:new Map() };
-    state.nodeByPath.set('', root);
-    for (const e of allEntries) {
-      const parts = e.path.split('/');
-      let cur = root;
-      for (let i=0; i<parts.length; i++) {
-        const name=parts[i], isLast=i===parts.length-1;
-        const childPath=parts.slice(0,i+1).join('/');
-        if (!cur.children.has(name)) {
-          const node = { type: isLast?(e.type==='tree'?'tree':'blob'):'tree', name, path:childPath, children:new Map(), sha:isLast?e.sha:undefined };
-          cur.children.set(name, node);
-          state.nodeByPath.set(childPath, node);
+      .sidebar .section.clickable:hover {
+        color: var(--accent);
+      }
+
+      .tree {
+        list-style: none;
+        margin: 0;
+        padding: 6px 8px 18px 8px;
+      }
+
+      .tree li {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border-radius: 8px;
+        margin: 10px 6px;
+        padding: 8px 10px;
+        cursor: pointer;
+        color: var(--text);
+      }
+
+      .tree li:hover {
+        background: var(--panel-2);
+      }
+
+      .tree li.active {
+        background: rgba(96,165,250,0.18);
+        border: 1px solid rgba(96,165,250,0.5);
+      }
+
+      .tree .icon {
+        width: 18px;
+        height: 18px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--muted);
+      }
+
+      .tree .icon img {
+        width: 18px;
+        height: 18px;
+        object-fit: contain;
+        opacity: 0.9;
+      }
+
+      main.content {
+        grid-area: main;
+        padding: 18px 22px 28px 22px;
+        overflow: auto;
+      }
+
+      .crumbs {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 12px;
+        color: var(--muted);
+      }
+
+      .crumbs a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+
+      .panel {
+        background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0));
+        border: 1px solid rgba(255,255,255,0.03);
+        border-radius: 14px;
+        box-shadow: var(--shadow);
+      }
+
+      .listing {
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        gap: 10px;
+        padding: 8px;
+      }
+
+      .listing .row {
+        display: contents;
+      }
+
+      .listing .cell {
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .listing .row:hover .cell {
+        background: var(--panel-2);
+      }
+
+      .viewer {
+        padding: 18px 20px;
+        line-height: 1.6;
+        overflow-wrap: anywhere;
+        color: #d7eefc;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        position: relative;
+        background: rgba(255,255,255,0.01);
+        border-radius: 10px;
+        /* Keep the code card at a fixed, viewport-based height and scroll its contents */
+        max-height: calc(100dvh - 180px);
+        overflow-y: auto;
+      }
+
+      .viewer .toolbar {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-bottom: 10px;
+        position: absolute;
+        top: 8px;
+        right: 10px;
+      }
+
+      .viewer .btn {
+        padding: 8px 12px;
+        background: linear-gradient(90deg, rgba(96,165,250,0.08), rgba(125,211,252,0.04));
+        color: #ffd699;
+        border: 1px solid rgba(255,255,255,0.03);
+        border-radius: 10px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        line-height: 1;
+        transition: transform .12s ease, box-shadow .12s ease;
+      }
+      .viewer .btn:active { transform: translateY(1px); }
+
+      .viewer .btn:hover {
+        filter: brightness(1.05);
+      }
+
+      .viewer .btn .ico {
+        display: inline-flex;
+        width: 18px;
+        height: 18px;
+        margin: 0;
+      }
+
+      /* Navigation row for Prev/Next buttons under the code block */
+      .viewer .navRow {
+        display: flex;
+        justify-content: flex-end;  /* right-align buttons */
+        align-items: center;
+        gap: 8px; /* small gap between Prev and Next buttons */
+        margin-top: 14px;
+      }
+      .viewer .navRow .btn {
+        min-width: auto;           /* no forced width */
+        justify-content: center;   /* keep icon and text close */
+        gap: 4px;                  /* tighter gap between icon and text */
+      }
+
+      /* Small secondary button at bottom of code block */
+      .viewer .btnSmall {
+        padding: 6px 10px;
+        background: rgba(255,255,255,0.02);
+        color: var(--muted);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        line-height: 1;
+        font-size: 12px;
+        transition: transform .12s ease, background .12s ease;
+        margin-top: 12px;
+        text-decoration: none;
+      }
+      .viewer .btnSmall:active { transform: translateY(1px); }
+      .viewer .btnSmall:hover {
+        background: rgba(255,255,255,0.04);
+        color: var(--text);
+      }
+      .viewer .btnSmall .ico {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 14px;
+        height: 14px;
+        margin: 0;
+      }
+      .viewer .btnSmall .ico svg {
+        width: 14px;
+        height: 14px;
+        opacity: 0.9;
+      }
+
+      .viewer .btnContainer {
+        display: flex;
+        justify-content: flex-start;
+        margin-top: 8px;
+      }
+
+        /* Download-all button row at bottom of page (non-home views) */
+      .downloadAllWrap {
+        margin-top: 18px;
+        display: none; /* shown only on non-home views via JS */
+        text-align: right;
+      }
+      .downloadAllBtn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: linear-gradient(90deg, rgba(96,165,250,0.18), rgba(125,211,252,0.10));
+        color: #ffe4b5;
+        cursor: pointer;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 500;
+        box-shadow: 0 4px 18px rgba(15,23,42,0.6);
+        transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+      }
+      .downloadAllBtn:hover {
+        filter: brightness(1.06);
+        transform: translateY(-1px);
+        box-shadow: 0 8px 26px rgba(15,23,42,0.8);
+      }
+      .downloadAllBtn:active {
+        transform: translateY(0);
+        box-shadow: 0 4px 16px rgba(15,23,42,0.6);
+      }
+      .downloadAllBtn .ico {
+        display: inline-flex;
+        width: 16px;
+        height: 16px;
+      }
+
+      /* Code block with line numbers and wrapping */
+      .viewer .codeblock {
+        display: block;
+        font-size: 14px;
+      }
+
+      .viewer .code-line {
+        display: grid;
+        grid-template-columns: minmax(2ch, 4ch) 1fr;
+        gap: 12px;
+        align-items: start;
+      }
+      .viewer .ln {
+        color: var(--muted);
+        text-align: right;
+        user-select: none;
+        opacity: 0.85;
+      }
+      .viewer .code {
+        white-space: pre-wrap; /* allow wrapping */
+        word-break: break-word; /* break long tokens on mobile */
+      }
+
+      /* Syntax highlighting (Python-oriented) */
+      .tok-comment { color: #7f8fa3; font-style: italic; }
+      .tok-string  { color: #a4d88f; }
+      .tok-keyword { color: #8ab4ff; }
+      .tok-builtin { color: #f6c177; }
+      .tok-number  { color: #f29e74; }
+      .tok-decorator { color: #c084fc; }
+      .tok-defname, .tok-classname { color: #53d3f3; }
+
+      .viewer .note {
+        color: var(--muted);
+        margin-bottom: 8px;
+        font-size: 22px;
+      }
+
+      .viewer .problem-statement {
+        background: rgba(96,165,250,0.08);
+        border: 1px solid rgba(96,165,250,0.2);
+        border-radius: 10px;
+        padding: 16px 18px;
+        margin-bottom: 20px;
+        line-height: 1.7;
+        color: #d7eefc;
+        white-space: pre-wrap;
+        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      }
+
+      .viewer .problem-statement-title {
+        color: var(--accent-2);
+        font-weight: 600;
+        font-size: 16px;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .viewer .output-section {
+        background: rgba(34,197,94,0.08);
+        border: 1px solid rgba(34,197,94,0.2);
+        border-radius: 10px;
+        padding: 16px 18px;
+        margin-top: 20px;
+        line-height: 1.7;
+        color: #d7eefc;
+        white-space: pre-wrap;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      }
+
+      .viewer .output-title {
+        color: #22c55e;
+        font-weight: 600;
+        font-size: 16px;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .results {
+        padding: 8px 10px 16px 10px;
+      }
+
+      .results .hit {
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 10px 12px;
+        margin: 8px 0;
+        background: var(--panel-2);
+      }
+
+      /* Progress bar for search */
+      .progressRow {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--muted);
+        padding: 8px 0 12px 0;
+      }
+      .progressBar {
+        position: relative;
+        flex: 1 1 auto;
+        height: 8px;
+        background: #ffa500;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        overflow: hidden;
+      }
+      .progressFill {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 0%;
+        background: #FFA500; /* orange */
+        box-shadow: 0 0 8px rgba(255,165,0,0.35);
+        transition: width .12s linear;
+      }
+
+      .results .hit .path {
+        color: var(--accent);
+        cursor: pointer;
+      }
+
+      .hl {
+        background: rgba(96,165,250,0.18);
+        border-bottom: 1px solid rgba(96,165,250,0.45);
+        border-radius: 4px;
+        padding: 0 2px;
+      }
+
+      .empty {
+        color: var(--muted);
+        padding: 10px;
+      }
+
+      .kbd {
+        display: inline-block;
+        padding: 2px 6px;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        background: #0e1217;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .rootLink {
+        color: white;
+        text-decoration: none;
+      }
+
+      @media (max-width: 980px) {
+        .app {
+          grid-template-columns: 1fr;
+          grid-template-areas:
+            "header"
+            "main";
         }
-        cur = cur.children.get(name);
+        aside.sidebar {
+          display: none;
+        }
+
+        .crumbs {
+          margin-top: 16px;
+        }
+
+        /* Give more room to code on small screens by reducing side padding */
+        main.content {
+          padding-left: 10px;
+          padding-right: 10px;
+        }
+
+        .code-line {
+            font-size: 10px;
+        }
+
+        header {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          z-index: 80;
+          transform: translateY(0);
+          will-change: transform;
+        }
+
+        /* ensure main content doesn't hide beneath fixed header on mobile */
+        main.content {
+          padding-top: var(--mobile-header-height);
+        }
+
+        .viewer {
+          padding-left: 10px;
+          padding-right: 10px;
+          /* On mobile, account for the fixed header so the card fits the screen */
+          max-height: calc(100dvh - var(--mobile-header-height) - 40px);
+        }
+
       }
-    }
-    const files = [...state.nodeByPath.values()].filter(n=>n.type==='blob');
-    state.fileIndex = files.sort((a,b)=>a.path.localeCompare(b.path));
-    state.programIndex = state.fileIndex.filter(f=>/\.py$/i.test(f.path));
-  }
 
-  // ─── Render ──────────────────────────────────────────────────────
-  function render(replacing=false) {
-    const { view, path, q } = parseLocation();
-    renderTabs(view, path);
-    renderBreadcrumbs(view, path, q);
-    renderSidebar(view, path, q);
-    const content = $('editor-content');
-    if (view === 'home')   renderHome(content);
-    else if (view === 'browse') renderFolder(path, content);
-    else if (view === 'file')   renderFile(path, content);
-    else if (view === 'search') renderSearch(q, content);
-    else renderHome(content);
-  }
+      /* Home view layout */
+      .homeWrap {
+        display: grid;
+        place-items: center;
+        height: 100vh;
+        padding: 24px;
+        overflow: hidden;
+      }
 
-  // ─── TABS ────────────────────────────────────────────────────────
-  function renderTabs(view, path) {
-    // add tab if opening a file
-    if (view === 'file' && path) {
-      if (!state.openTabs.find(t=>t.path===path))
-        state.openTabs.push({ path, name: getBasename(path) });
-      state.activeTab = path;
-    }
-    if (view === 'home') { state.activeTab = '__home__'; if (!state.openTabs.find(t=>t.path==='__home__')) state.openTabs.unshift({path:'__home__',name:'Welcome'}); }
-    if (view === 'search') { state.activeTab = '__search__'; if (!state.openTabs.find(t=>t.path==='__search__')) state.openTabs.push({path:'__search__',name:'Search Results'}); }
+      .homeCard {
+        width: min(920px, 92vw);
+        padding: 28px 26px;
+        border-radius: 16px;
+        background: rgba(23,26,32,0.8);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(6px);
+      }
 
-    const tc = $('tabsContainer');
-    tc.innerHTML = '';
-    for (const tab of state.openTabs) {
-      const isActive = tab.path === state.activeTab;
-      const div = document.createElement('div');
-      div.className = 'tab' + (isActive ? ' active' : '');
-      const isSpecial = tab.path === '__home__' || tab.path === '__search__';
-      const iconUrl = isSpecial ? 'https://raw.githubusercontent.com/PiyushJT/PiyushJT/00ca33b80496d6ca543332f53b314e62ddf3e37b/icons/python.svg' : iconFor(tab.path, false);
-      div.innerHTML = `
-        <span class="tab-icon"><img src="${iconUrl}" alt=""></span>
-        <span class="tab-name">${tab.name}</span>
-        <span class="tab-close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg></span>
-      `;
-      div.addEventListener('click', (e) => {
-        if (e.target.closest('.tab-close')) {
-          state.openTabs = state.openTabs.filter(t=>t.path!==tab.path);
-          if (state.activeTab === tab.path) {
-            const last = state.openTabs[state.openTabs.length-1];
-            if (last) {
-              if (last.path==='__home__') navigate({view:'home'},true);
-              else if (last.path==='__search__') navigate({view:'search',q:''},true);
-              else navigate({view:'file',p:last.path},true);
-            } else navigate({view:'home'},true);
-          } else renderTabs(parseLocation().view, parseLocation().path);
+      .homeTitle {
+        margin: 0 0 14px 0;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        font-size: 22px;
+      }
+
+      .homeSubtitle {
+        margin: 0 0 18px 0;
+        color: var(--muted);
+      }
+
+      .homeSearchRow {
+        position: relative;
+        margin-top: 8px;
+      }
+
+      .homeSearchRow input[type="search"] {
+        width: 100%;
+        padding: 22px 20px 22px 56px;
+        background: var(--panel);
+        color: var(--text);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        outline: none;
+        transition: border-color .2s ease, box-shadow .2s ease;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+        font-size: 20px;
+      }
+
+      .homeSearchRow input[type="search"]:focus {
+        border-color: rgba(96,165,250,0.6);
+        box-shadow: 0 0 0 6px rgba(96,165,250,0.12);
+      }
+
+      .homeSearchRow .icon {
+        position: absolute;
+        left: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        color: var(--muted);
+        font-size: 18px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .homeActions {
+        margin-top: 14px;
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+      }
+
+      .homeDivider {
+        display: flex;
+        align-items: center;
+        margin: 16px 0;
+        gap: 12px;
+      }
+
+      .homeDivider::before,
+      .homeDivider::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+      }
+
+      .homeDivider .or {
+        color: var(--muted);
+        font-size: 14px;
+        font-weight: 500;
+        padding: 0 8px;
+      }
+
+      .btnPrimary {
+        padding: 12px 14px;
+        background: var(--accent);
+        color: #0b1020;
+        border: 1px solid rgba(79,140,255,0.4);
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        flex: 1;
+      }
+
+      .btnPrimary:hover { filter: brightness(1.05); }
+
+      .btnSearch {
+        padding: 12px 14px;
+        background: #22c55e; /* Emerald green - represents action */
+        color: #0b1020;
+        border: 1px solid rgba(34,197,94,0.4);
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        flex: 1;
+      }
+
+      .btnSearch:hover { filter: brightness(1.05); }
+
+      .homeActions {
+        display: flex;
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      .homeQuizWrap {
+        margin-top: 18px;
+        text-align: center;
+      }
+      .btnQuiz {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 14px 24px;
+        border-radius: 999px;
+        border: 1px solid rgba(34,197,94,0.5);
+        background: linear-gradient(90deg, rgba(34,197,94,0.18), rgba(34,197,94,0.10));
+        color: #bbf7d0;
+        cursor: pointer;
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: 600;
+        box-shadow: 0 4px 18px rgba(15,23,42,0.6);
+        transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+      }
+      .btnQuiz:hover {
+        filter: brightness(1.08);
+        transform: translateY(-1px);
+        box-shadow: 0 8px 26px rgba(15,23,42,0.8);
+      }
+      .btnQuiz:active {
+        transform: translateY(0);
+        box-shadow: 0 4px 16px rgba(15,23,42,0.6);
+      }
+
+      @media (max-width: 860px) {
+        .homeActions {
+          flex-direction: column;
+        }
+        .homeActions button {
+          width: 100%;
+        }
+      }
+
+      /* GitHub button (anchor styled as button) */
+      .btnGithub {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 12px;
+        background: transparent;
+        color: var(--text);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        cursor: pointer;
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .btnGithub:hover { background: rgba(255,255,255,0.02); }
+
+      /* Floating GitHub FAB */
+      .fabGithubWrap {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        z-index: 60;
+      }
+      .fabGithub {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+        width: 46px;
+        height: 46px;
+        padding: 8px;
+        border-radius: 999px;
+        background: transparent; /* no blue circle */
+        color: #ffffff; /* white icon */
+        box-shadow: none;
+        text-decoration: none;
+        border: 1px solid rgba(255,255,255,0.04);
+        transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+      }
+      .fabGithub:focus { outline: 3px solid rgba(255,255,255,0.08); }
+      .fabGithub:hover { transform: translateY(-2px); background: rgba(255,255,255,0.02); }
+
+      /* Responsive tweaks for home */
+      @media (max-width: 860px) {
+        .homeWrap { place-items: start center; padding: 14px; }
+        .homeCard { width: 100%; padding: 18px; border-radius: 12px; }
+        .homeTitle { font-size: 20px; }
+        .homeSearchRow input[type="search"] { font-size: 18px; padding: 20px 18px 20px 52px; }
+        .homeActions { justify-content: stretch; }
+        .homeActions .btnPrimary { width: 100%; }
+      }
+    </style>
+  </head>
+  <body class="preinit">
+    <div class="app">
+      <header>
+        <div class="brand" title="PiyushJT/Python-Material">
+            <div class="title">
+                <a class="rootLink" href="https://piyushjt.github.io/Python-Material/">Python Progs</a>
+            </div>
+        </div>
+        <form class="search" id="searchForm">
+          <span class="icon" aria-hidden="true"><img src="https://raw.githubusercontent.com/PiyushJT/PiyushJT/a9d7747e25350a58f5bff349735fba8d43a573b5/search.svg" alt="" style="width:16px;height:16px;opacity:.9;"/></span>
+          <input id="searchInput" type="search" placeholder="Code, Problem, File, etc" autocomplete="off" />
+          <button type="button" class="clearBtn" id="searchClearBtn" aria-label="Clear search">
+            <img src="https://raw.githubusercontent.com/PiyushJT/PiyushJT/190350a5e5b727ddc0cd3557e2d7029305bf5994/icons/cross.svg" alt="X" style="width:20px;height:20px;"/>
+          </button>
+        </form>
+      </header>
+
+      <aside class="sidebar">
+        <div class="section" id="sidebarSection">Folders</div>
+        <ul class="tree" id="rootTree"></ul>
+      </aside>
+
+      <main class="content">
+        <nav class="crumbs" id="breadcrumbs"></nav>
+        <section class="panel" id="panel">
+          <div id="panelInner"></div>
+        </section>
+        <div class="downloadAllWrap" id="downloadAllWrap"></div>
+      </main>
+    </div>
+
+    <script>
+      const OWNER = "dwarkesh777";
+      const REPO = "FSD2";
+      // TODO: Replace with your actual MCQ quiz site URL if different
+      
+      const TICK_ICON_URL = "https://github.com/dwarkesh777";
+
+      const state = {
+        defaultBranch: "main",
+        treeByPath: new Map(),
+        nodeByPath: new Map(),
+        contentCache: new Map(),
+        fileIndex: [],
+        programIndex: [],
+        searchAbort: null,
+        prefetchStarted: false
+      };
+
+      function $(id) { return document.getElementById(id); }
+
+      function toQuery(params) {
+        const usp = new URLSearchParams();
+        Object.entries(params).forEach(([k, v]) => {
+          if (v !== undefined && v !== null && v !== "") usp.set(k, v);
+        });
+        return `?${usp.toString()}`;
+      }
+
+      function parseLocation() {
+        const usp = new URLSearchParams(location.search);
+        return {
+          view: usp.get("view") || "home",
+          path: usp.get("p") || "",
+          q: usp.get("q") || ""
+        };
+      }
+
+      function navigate(newState, replace = false) {
+        const query = toQuery(newState);
+        const url = `${location.pathname}${query}`;
+        if (replace) history.replaceState(null, "", url); else history.pushState(null, "", url);
+        render();
+      }
+
+      async function fetchJSON(url, init) {
+        const res = await fetch(url, init);
+        if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
+        return await res.json();
+      }
+
+      async function init() {
+        const meta = await fetchJSON(`https://api.github.com/repos/${OWNER}/${REPO}`);
+        state.defaultBranch = meta.default_branch || "main";
+
+        // Load tree non-recursively and then traverse all directories
+        const rootTree = await fetchJSON(`https://api.github.com/repos/${OWNER}/${REPO}/git/trees/${encodeURIComponent(state.defaultBranch)}`);
+        const allEntries = await loadAllEntriesRecursively(rootTree.tree, "");
+        buildIndexesFromEntries(allEntries);
+        const { view, path } = parseLocation();
+        renderSidebar(view, path);
+        render(true);
+        if (!state.prefetchStarted) {
+          state.prefetchStarted = true;
+          prefetchSmallFiles().catch(() => {});
+        }
+        // Reveal the app now that first render has completed
+        document.body.classList.remove('preinit');
+      }
+
+      async function loadAllEntriesRecursively(entries, parentPath) {
+        const allEntries = [];
+        const treeEntries = [];
+        
+        // Separate files and directories
+        for (const entry of entries) {
+          if (entry.type === "blob") {
+            // File entry - construct full path and include it
+            const fullPath = parentPath ? `${parentPath}/${entry.path}` : entry.path;
+            allEntries.push({ ...entry, path: fullPath });
+          } else if (entry.type === "tree") {
+            // Directory entry - construct full path and collect for recursive loading
+            const dirPath = parentPath ? `${parentPath}/${entry.path}` : entry.path;
+            const dirEntry = { ...entry, path: dirPath };
+            treeEntries.push(dirEntry);
+            allEntries.push(dirEntry);
+          }
+        }
+
+        // Load all directories with concurrency limit to avoid rate limits
+        if (treeEntries.length === 0) {
+          return allEntries;
+        }
+
+        // Process directories with controlled concurrency
+        const concurrency = 5;
+        const results = [];
+        for (let i = 0; i < treeEntries.length; i += concurrency) {
+          const batch = treeEntries.slice(i, i + concurrency);
+          const batchResults = await Promise.all(
+            batch.map(async (dirEntry) => {
+              try {
+                const dirTree = await fetchJSON(`https://api.github.com/repos/${OWNER}/${REPO}/git/trees/${dirEntry.sha}`);
+                return await loadAllEntriesRecursively(dirTree.tree, dirEntry.path);
+              } catch (e) {
+                console.warn(`Failed to load directory ${dirEntry.path}:`, e);
+                return [];
+              }
+            })
+          );
+          results.push(...batchResults);
+        }
+
+        // Flatten and add all sub-entries
+        for (const subEntries of results) {
+          allEntries.push(...subEntries);
+        }
+
+        return allEntries;
+      }
+
+      function buildIndexesFromEntries(allEntries) {
+        const root = { type: "tree", name: "", path: "", children: new Map() };
+        state.nodeByPath.set("", root);
+
+        for (const entry of allEntries) {
+          const parts = entry.path.split("/");
+          let cursor = root;
+          for (let i = 0; i < parts.length; i++) {
+            const name = parts[i];
+            const isLast = i === parts.length - 1;
+            const childPath = parts.slice(0, i + 1).join("/");
+            let existing = cursor.children.get(name);
+            if (!existing) {
+              existing = {
+                type: isLast ? (entry.type === "tree" ? "tree" : "blob") : "tree",
+                name,
+                path: childPath,
+                children: new Map(),
+                sha: isLast ? entry.sha : undefined
+              };
+              cursor.children.set(name, existing);
+              state.nodeByPath.set(childPath, existing);
+            }
+            cursor = existing;
+          }
+        }
+
+        state.treeByPath = state.nodeByPath; // alias
+
+        const files = [];
+        for (const node of state.nodeByPath.values()) {
+          if (node.type === "blob") files.push(node);
+        }
+        state.fileIndex = files.sort((a, b) => a.path.localeCompare(b.path));
+        // Index of Python "program" files for next/prev navigation
+        state.programIndex = state.fileIndex.filter(f => /\.py$/i.test(f.path));
+      }
+
+
+      function iconForPath(path, isDir) {
+        if (isDir) return "https://raw.githubusercontent.com/PiyushJT/PiyushJT/1cadac55bb62a80e9bfdc6cc8fb9eefce1d7eee4/icons/folder.svg";
+        const ext = (path.split('.').pop() || '').toLowerCase();
+        const map = {
+          'py': 'https://raw.githubusercontent.com/PiyushJT/PiyushJT/00ca33b80496d6ca543332f53b314e62ddf3e37b/icons/python.svg',
+          'java': 'https://raw.githubusercontent.com/PiyushJT/PiyushJT/00ca33b80496d6ca543332f53b314e62ddf3e37b/icons/java.svg',
+          'txt': 'https://raw.githubusercontent.com/PiyushJT/PiyushJT/00ca33b80496d6ca543332f53b314e62ddf3e37b/icons/txt.svg',
+          'csv': 'https://raw.githubusercontent.com/PiyushJT/PiyushJT/00ca33b80496d6ca543332f53b314e62ddf3e37b/icons/csv.svg',
+        };
+        return map[ext] || 'https://raw.githubusercontent.com/PiyushJT/PiyushJT/00ca33b80496d6ca543332f53b314e62ddf3e37b/icons/file.svg';
+      }
+
+      function getParentPath(path) {
+        if (!path) return "";
+        const parts = path.split("/");
+        parts.pop();
+        return parts.join("/");
+      }
+
+      function renderSidebar(view, path) {
+        const ul = $("rootTree");
+        if (!ul) return;
+        const sectionDiv = $("sidebarSection");
+        let dirPath = "";
+        let highlightPath = "";
+
+        if (view === "browse" || view === "file") {
+          const node = state.nodeByPath.get(path || "");
+          if (node) {
+            if (node.type === "tree") {
+              const currentFolder = node.path || "";
+              const parent = getParentPath(currentFolder) || "";
+              dirPath = parent;
+              highlightPath = currentFolder;
+            } else {
+              const parent = getParentPath(node.path) || "";
+              dirPath = parent;
+              // Highlight the currently opened file within its parent folder
+              highlightPath = node.path;
+            }
+          }
+        } else {
+          // home & search -> show root level
+          dirPath = "";
+        }
+
+        // Update sidebar section title with parent folder name
+        if (sectionDiv) {
+          // Remove any existing click handlers by cloning (removes event listeners)
+          const oldClickHandler = sectionDiv._clickHandler;
+          if (oldClickHandler) {
+            sectionDiv.removeEventListener("click", oldClickHandler);
+          }
+          
+          if (dirPath) {
+            const parentParts = dirPath.split("/");
+            const parentName = parentParts[parentParts.length - 1] || dirPath;
+            sectionDiv.textContent = parentName;
+            sectionDiv.classList.add("clickable");
+            const clickHandler = () => {
+              navigate({ view: "browse", p: dirPath });
+            };
+            sectionDiv.addEventListener("click", clickHandler);
+            sectionDiv._clickHandler = clickHandler; // Store reference for cleanup
+          } else {
+            sectionDiv.textContent = "Folders";
+            sectionDiv.classList.remove("clickable");
+            sectionDiv._clickHandler = null;
+          }
+        }
+
+        const dirNode = state.nodeByPath.get(dirPath) || state.nodeByPath.get("");
+        ul.innerHTML = "";
+
+        let children = Array.from(dirNode.children.values());
+        // When showing root directory in sidebar (dirPath is empty),
+        // only show folders. For subdirectories, show all items.
+        const isRootDirView = !dirPath;
+        if (isRootDirView) {
+          children = children.filter(n => n.type === "tree");
+        }
+        children = children.sort((a, b) => a.name.localeCompare(b.name));
+
+        for (const item of children) {
+          const li = document.createElement("li");
+          const iconUrl = iconForPath(item.path, item.type === "tree");
+          li.innerHTML = `<span class="icon"><img src="${iconUrl}" alt=""/></span><span>${item.name}</span>`;
+          if (highlightPath && item.path === highlightPath) {
+            li.classList.add("active");
+          }
+          li.addEventListener("click", () => {
+            navigate({ view: item.type === "tree" ? "browse" : "file", p: item.path });
+          });
+          ul.appendChild(li);
+        }
+      }
+
+      function renderDownloadAll(view) {
+        const wrap = $("downloadAllWrap");
+        if (!wrap) return;
+        if (view === "home") {
+          wrap.style.display = "none";
+          wrap.innerHTML = "";
           return;
         }
-        if (tab.path==='__home__') navigate({view:'home'},true);
-        else if (tab.path==='__search__') navigate({view:'search',q:''},true);
-        else navigate({view:'file',p:tab.path},true);
-      });
-      tc.appendChild(div);
-    }
-  }
-
-  // ─── BREADCRUMBS ────────────────────────────────────────────────
-  function renderBreadcrumbs(view, path, q) {
-    const bc = $('breadcrumbs');
-    bc.innerHTML = '';
-    const add = (label, st, iconUrl) => {
-      const span = document.createElement('span');
-      span.className = 'crumb';
-      span.innerHTML = (iconUrl ? `<img src="${iconUrl}" alt="">` : '') + label;
-      span.addEventListener('click', ()=>navigate(st));
-      bc.appendChild(span);
-      const sep = document.createElement('span');
-      sep.className = 'crumb-sep';
-      sep.textContent = '›';
-      bc.appendChild(sep);
-    };
-    if (view === 'home') { const s=document.createElement('span'); s.className='crumb'; s.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> Welcome'; bc.appendChild(s); return; }
-    add('FSD2', {view:'browse',p:''});
-    if (view === 'search') { const s=document.createElement('span'); s.className='crumb'; s.textContent=`Search: "${q}"`; bc.appendChild(s); return; }
-    const parts = path ? path.split('/') : [];
-    let acc = '';
-    for (let i=0; i<parts.length; i++) {
-      acc = i===0 ? parts[0] : `${acc}/${parts[i]}`;
-      const isLast = i===parts.length-1;
-      const isDir = !isLast || view==='browse';
-      add(parts[i], isDir ? {view:'browse',p:acc} : {view:'file',p:acc}, iconFor(acc, isDir));
-    }
-    // remove trailing sep
-    if (bc.lastChild && bc.lastChild.className==='crumb-sep') bc.removeChild(bc.lastChild);
-  }
-
-  // ─── SIDEBAR ─────────────────────────────────────────────────────
-  function renderSidebar(view, path, q) {
-    const sectionLabel = $('sectionLabel');
-    const tree = $('sidebarTree');
-    tree.innerHTML = '';
-    let dirPath = '';
-    if (view==='browse'||view==='file') {
-      const node = state.nodeByPath.get(path||'');
-      dirPath = node ? (node.type==='tree' ? (getParent(node.path)||'') : (getParent(node.path)||'')) : '';
-    }
-    const dirNode = state.nodeByPath.get(dirPath) || state.nodeByPath.get('');
-    if (sectionLabel) sectionLabel.textContent = dirPath ? (getBasename(dirPath)||'ROOT').toUpperCase() : 'PYTHON-MATERIAL';
-    if (!dirNode) return;
-    let children = [...dirNode.children.values()].sort((a,b)=>{
-      if(a.type!==b.type) return a.type==='tree'?-1:1;
-      return a.name.localeCompare(b.name);
-    });
-    if (!dirPath) children = children.filter(n=>n.type==='tree');
-    for (const child of children) {
-      appendTreeItem(child, tree, path, 0);
-    }
-  }
-
-  function appendTreeItem(node, container, activePath, depth) {
-    const isDir = node.type === 'tree';
-    const isActive = node.path === activePath;
-    const li = document.createElement('div');
-    li.className = 'tree-item' + (isActive ? ' active' : '');
-    li.style.paddingLeft = `${8 + depth*14}px`;
-    const arrowHtml = isDir ? `<span class="ti-arrow"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5l8 7-8 7"/></svg></span>` : `<span style="width:16px;flex-shrink:0"></span>`;
-    li.innerHTML = `
-      ${arrowHtml}
-      <span class="ti-icon"><img src="${iconFor(node.path,isDir)}" alt=""></span>
-      <span class="ti-name">${node.name}</span>
-    `;
-    li.addEventListener('click', () => navigate({ view: isDir?'browse':'file', p: node.path }));
-    container.appendChild(li);
-  }
-
-  // ─── HOME / WELCOME ──────────────────────────────────────────────
-  function renderHome(container) {
-    container.innerHTML = '';
-    const wrap = document.createElement('div');
-    wrap.className = 'welcome-screen';
-    wrap.innerHTML = `
-      <div class="welcome-inner">
-        <div class="welcome-logo">
-          <img src="https://raw.githubusercontent.com/PiyushJT/PiyushJT/00ca33b80496d6ca543332f53b314e62ddf3e37b/icons/python.svg" alt="Python">
-          <div class="welcome-logo-text">
-            <h1>Python Programs</h1>
-            <p>Browse, search, and study code across the repository</p>
-          </div>
-        </div>
-
-        <div class="welcome-search-wrap">
-          <span class="welcome-search-icon">
-            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-          </span>
-          <input class="welcome-search-input" id="homeSearchInput" type="search" placeholder="Search code, problems, files…" autocomplete="off"/>
-          <button class="welcome-clear-btn" id="homeClearBtn" aria-label="Clear">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
-          </button>
-        </div>
-
-        <div class="welcome-actions">
-          <button class="welcome-btn primary" id="wSearchBtn">
-            <span class="wb-icon">
-              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#3794ff" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-            </span>
-            <span class="wb-text">
-              <strong>Search Code</strong>
-              <span>Full-text search across all files</span>
-            </span>
-          </button>
-          <button class="welcome-btn secondary" id="wNavBtn">
-            <span class="wb-icon">
-              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#4ec9b0" stroke-width="2"><path d="M3 7c0-1.1.9-2 2-2h5l2 2h7a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg>
-            </span>
-            <span class="wb-text">
-              <strong>Browse Files</strong>
-              <span>Navigate the file tree manually</span>
-            </span>
-          </button>
-          <a class="welcome-btn tertiary" href="https://github.com/dwarkesh777/FSD2/archive/refs/heads/main.zip">
-            <span class="wb-icon">
-              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#c586c0" stroke-width="2"><path d="M12 3v13M8 12l4 4 4-4"/><path d="M5 19h14"/></svg>
-            </span>
-            <span class="wb-text">
-              <strong>Download All</strong>
-              <span>Get the full repo as ZIP</span>
+        const branch = state.defaultBranch || "main";
+        const zipUrl = `https://github.com/${OWNER}/${REPO}/archive/refs/heads/${encodeURIComponent(branch)}.zip`;
+        wrap.style.display = "block";
+        wrap.innerHTML = `
+          <a href="${zipUrl}" class="downloadAllBtn">
+            <span>Download all codes (ZIP)</span>
+            <span class="ico">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 3a1 1 0 0 1 1 1v9.086l2.293-2.293a1 1 0 1 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4A1 1 0 0 1 8.707 10.793L11 13.086V4a1 1 0 0 1 1-1z"/>
+                <path d="M5 18a1 1 0 0 0 0 2h14a1 1 0 1 0 0-2H5z"/>
+              </svg>
             </span>
           </a>
-        </div>
-
-        <a class="welcome-quiz-btn" href="${QUIZ_URL}" target="_blank" rel="noopener">
-          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          Practice Python MCQs
-        </a>
-      </div>
-    `;
-    container.appendChild(wrap);
-
-    const inp = wrap.querySelector('#homeSearchInput');
-    const clr = wrap.querySelector('#homeClearBtn');
-    function toggleClr() { clr.style.display = inp.value ? 'inline-flex' : 'none'; }
-    inp.addEventListener('input', toggleClr);
-    clr.addEventListener('click', () => { inp.value=''; inp.focus(); toggleClr(); });
-    wrap.querySelector('#wNavBtn').addEventListener('click', ()=>navigate({view:'browse',p:''}));
-    wrap.querySelector('#wSearchBtn').addEventListener('click', ()=>{
-      const q=inp.value.trim(); if(q) navigate({view:'search',q}); else inp.focus();
-    });
-    inp.addEventListener('keydown', e=>{
-      if(e.key==='Enter'){ const q=inp.value.trim(); if(q) navigate({view:'search',q}); }
-    });
-    inp.focus();
-  }
-
-  // ─── FOLDER VIEW ─────────────────────────────────────────────────
-  function renderFolder(path, container) {
-    const node = state.nodeByPath.get(path||'');
-    if (!node || node.type !== 'tree') { navigate({view:'browse',p:''},true); return; }
-    container.innerHTML = '';
-    const wrap = document.createElement('div');
-    wrap.className = 'folder-view';
-    const header = document.createElement('div');
-    header.className = 'folder-header';
-    header.textContent = path ? getBasename(path) : 'Root';
-    wrap.appendChild(header);
-    const grid = document.createElement('div');
-    grid.className = 'folder-grid';
-    const entries = [...node.children.values()].sort((a,b)=>{ if(a.type!==b.type) return a.type==='tree'?-1:1; return a.name.localeCompare(b.name); });
-    const showFiles = path !== '';
-    for (const e of entries) {
-      if (!showFiles && e.type!=='tree') continue;
-      const card = document.createElement('div');
-      card.className = 'folder-card';
-      card.innerHTML = `<img src="${iconFor(e.path,e.type==='tree')}" alt=""><span>${e.name}</span>`;
-      card.addEventListener('click', ()=>navigate({view:e.type==='tree'?'browse':'file',p:e.path}));
-      grid.appendChild(card);
-    }
-    wrap.appendChild(grid);
-    container.appendChild(wrap);
-  }
-
-  // ─── FILE VIEW ───────────────────────────────────────────────────
-  async function renderFile(path, container) {
-    const node = state.nodeByPath.get(path);
-    if (!node || node.type !== 'blob') { navigate({view:'browse',p:''},true); return; }
-    container.innerHTML = `<div style="padding:20px;color:rgba(255,255,255,0.3);font-family:'JetBrains Mono',monospace;font-size:13px;">Loading ${path}…</div>`;
-    const key = `${state.defaultBranch}:${path}`;
-    let content = state.contentCache.get(key);
-    if (!content) {
-      const url = `https://raw.githubusercontent.com/${OWNER}/${REPO}/${encodeURIComponent(state.defaultBranch)}/${encodeURI(path)}`;
-      const res = await fetch(url);
-      if (!res.ok) { container.innerHTML=`<div style="padding:20px;color:#f44747;">Unable to fetch file.</div>`; return; }
-      content = await res.text();
-      state.contentCache.set(key, content);
-    }
-    const isPy = /\.py$/i.test(path);
-    let parsed = null, codeContent = content;
-    if (isPy) { parsed = parsePythonFile(content); codeContent = parsed.code; }
-
-    // Prev / Next
-    const src = state.programIndex.length > 0 ? state.programIndex : state.fileIndex;
-    const ci = src.findIndex(f=>f.path===path);
-    const prevPath = ci > 0 ? src[ci-1].path : null;
-    const nextPath = ci >= 0 && ci < src.length-1 ? src[ci+1].path : null;
-
-    const lines = codeContent.split('\n');
-    $('sbLines').textContent = `Ln 1, Col 1  |  ${lines.length} lines`;
-    $('sbLang').textContent = isPy ? 'Python' : (path.split('.').pop()||'Text');
-
-    container.innerHTML = '';
-    const view = document.createElement('div');
-    view.className = 'code-viewer';
-
-    // Toolbar
-    const tb = document.createElement('div');
-    tb.className = 'viewer-toolbar';
-
-    const copyBtn = document.createElement('button');
-    copyBtn.className = 'viewer-btn';
-    copyBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy Code`;
-    copyBtn.addEventListener('click', async () => {
-      if (copyBtn.__lock) return;
-      copyBtn.__lock = true;
-      const orig = copyBtn.innerHTML;
-      try {
-        await navigator.clipboard.writeText(codeContent);
-      } catch {
-        const ta=document.createElement('textarea'); ta.value=codeContent; ta.style.cssText='position:fixed;opacity:0'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+        `;
       }
-      copyBtn.innerHTML = `${TICK_SVG} <span style="color:#4ec9b0">Copied!</span>`;
-      copyBtn.classList.add('copied');
-      setTimeout(()=>{ copyBtn.innerHTML=orig; copyBtn.classList.remove('copied'); copyBtn.__lock=false; }, 2000);
-    });
-    tb.appendChild(copyBtn);
 
-    const ghBtn = document.createElement('a');
-    ghBtn.className = 'viewer-btn';
-    ghBtn.href = `https://github.com/${OWNER}/${REPO}/blob/${state.defaultBranch}/${path}`;
-    ghBtn.target = '_blank'; ghBtn.rel = 'noopener';
-    ghBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 .5C5.65.5.5 5.65.5 12.02c0 5.09 3.29 9.4 7.86 10.93.58.11.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.53-1.35-1.3-1.7-1.3-1.7-1.06-.73.08-.72.08-.72 1.17.08 1.78 1.2 1.78 1.2 1.04 1.78 2.74 1.27 3.4.98.11-.75.41-1.26.75-1.55-2.55-.29-5.23-1.28-5.23-5.71 0-1.26.45-2.29 1.2-3.09-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 2.9-.39c.99 0 1.99.13 2.92.39 2.2-1.49 3.17-1.18 3.17-1.18.64 1.59.24 2.77.12 3.06.75.8 1.2 1.83 1.2 3.09 0 4.44-2.69 5.41-5.25 5.69.42.37.8 1.1.8 2.22 0 1.6-.01 2.88-.01 3.27 0 .31.21.68.8.56A10.53 10.53 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg> View on GitHub`;
-    tb.appendChild(ghBtn);
-
-    const spacer = document.createElement('span');
-    spacer.className = 'nav-spacer';
-    tb.appendChild(spacer);
-
-    // Prev/Next in toolbar
-    const prevBtn = document.createElement('button');
-    prevBtn.className = 'viewer-btn';
-    prevBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M15 18l-6-6 6-6"/></svg> Prev`;
-    if (!prevPath) { prevBtn.disabled=true; prevBtn.style.opacity='0.35'; } else prevBtn.addEventListener('click',()=>navigate({view:'file',p:prevPath},true));
-    tb.appendChild(prevBtn);
-
-    const nextBtn = document.createElement('button');
-    nextBtn.className = 'viewer-btn';
-    nextBtn.innerHTML = `Next <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M9 18l6-6-6-6"/></svg>`;
-    if (!nextPath) { nextBtn.disabled=true; nextBtn.style.opacity='0.35'; } else nextBtn.addEventListener('click',()=>navigate({view:'file',p:nextPath},true));
-    tb.appendChild(nextBtn);
-
-    view.appendChild(tb);
-
-    // Problem statement
-    if (isPy && parsed && parsed.problemStatement) {
-      const pb = document.createElement('div');
-      pb.className = 'problem-panel';
-      pb.innerHTML = `<div class="problem-title">💬 Problem Statement</div><div class="problem-text">${escapeHtml(parsed.problemStatement)}</div>`;
-      view.appendChild(pb);
-    }
-
-    // Code scroll area with minimap
-    const codeRow = document.createElement('div');
-    codeRow.style.cssText = 'display:flex;flex:1;overflow:hidden;';
-
-    const codeScroll = document.createElement('div');
-    codeScroll.className = 'code-scroll';
-    codeScroll.style.flex = '1';
-
-    const codeBlock = document.createElement('div');
-    codeBlock.className = 'code-block';
-
-    const hlLines = isPy ? highlightPythonLines(codeContent) : escapeHtml(codeContent).split('\n');
-    for (let i=0; i<hlLines.length; i++) {
-      const row = document.createElement('div');
-      row.className = 'code-line';
-      row.innerHTML = `<span class="ln">${i+1}</span><span class="lc">${hlLines[i]===''?'&nbsp;':hlLines[i]}</span>`;
-      codeBlock.appendChild(row);
-    }
-    codeScroll.appendChild(codeBlock);
-    codeRow.appendChild(codeScroll);
-
-    // Minimap (decorative)
-    const minimap = document.createElement('div');
-    minimap.className = 'minimap';
-    const mmLines = document.createElement('div');
-    mmLines.className = 'minimap-lines';
-    const colors = ['rgba(86,156,214,0.6)','rgba(206,145,120,0.6)','rgba(106,153,85,0.6)','rgba(78,201,176,0.6)','rgba(220,220,170,0.6)'];
-    for (let i=0; i<Math.min(hlLines.length, 200); i++) {
-      const ml = document.createElement('div');
-      ml.className = 'minimap-line';
-      const len = hlLines[i].replace(/<[^>]*>/g,'').length;
-      ml.style.width = Math.min(100,Math.max(5,len*0.6))+'%';
-      ml.style.background = colors[i%colors.length];
-      mmLines.appendChild(ml);
-    }
-    const mmvp = document.createElement('div'); mmvp.className='minimap-viewport';
-    minimap.appendChild(mmLines);
-    minimap.appendChild(mmvp);
-    codeRow.appendChild(minimap);
-
-    view.appendChild(codeRow);
-
-    // Output
-    if (isPy && parsed && parsed.output) {
-      const op = document.createElement('div');
-      op.className = 'output-panel';
-      op.innerHTML = `<div class="output-header"><span class="output-dot"></span> Terminal — Output</div><div class="output-body">${escapeHtml(parsed.output)}</div>`;
-      view.appendChild(op);
-    }
-
-    container.appendChild(view);
-  }
-
-  // ─── SEARCH ──────────────────────────────────────────────────────
-  function cancelSearch() { if(state.searchAbort){ state.searchAbort.aborted=true; state.searchAbort=null; } }
-
-  async function renderSearch(query, container) {
-    cancelSearch();
-    const guard = { aborted: false };
-    state.searchAbort = guard;
-    const q = (query||'').trim();
-    container.innerHTML = '';
-
-    const wrap = document.createElement('div');
-    wrap.className = 'search-view';
-
-    if (!q) {
-      wrap.innerHTML = `<div class="search-empty">Type a query in the search bar above and press Enter.</div>`;
-      container.appendChild(wrap);
-      return;
-    }
-
-    const header = document.createElement('div');
-    header.className = 'search-header';
-    header.textContent = `Results for "${q}"`;
-    wrap.appendChild(header);
-
-    const progressWrap = document.createElement('div');
-    progressWrap.className = 'progress-wrap';
-    progressWrap.innerHTML = `<div class="progress-bar"><div class="progress-fill" id="srchProg"></div></div><span>Scanning…</span>`;
-    wrap.appendChild(progressWrap);
-
-    const list = document.createElement('div');
-    wrap.appendChild(list);
-    container.appendChild(wrap);
-
-    const lower = q.toLowerCase();
-    function addResult(kind, path, snippet) {
-      const div = document.createElement('div');
-      div.className = 'search-item';
-      const isDir = kind==='folder';
-      div.innerHTML = `
-        <span class="si-icon"><img src="${iconFor(path,isDir)}" alt=""></span>
-        <div>
-          <div class="si-path">${hl(path,q)}</div>
-          ${snippet ? `<div class="si-snippet">… ${hl(snippet,q)} …</div>` : ''}
-        </div>
-      `;
-      div.addEventListener('click',()=>navigate({view:isDir?'browse':'file',p:path}));
-      list.appendChild(div);
-    }
-
-    // Folders
-    [...state.nodeByPath.values()].filter(n=>n.type==='tree'&&n.path&&n.name.toLowerCase().includes(lower)).sort((a,b)=>a.path.localeCompare(b.path)).forEach(f=>addResult('folder',f.path,''));
-    // Files by name
-    const nameMatches = state.fileIndex.filter(f=>getBasename(f.path).toLowerCase().includes(lower));
-    nameMatches.forEach(f=>addResult('file',f.path,''));
-    // Content
-    const remaining = state.fileIndex.filter(f=>!nameMatches.includes(f));
-    const concurrency=6; let idx=0, inFlight=0, foundAny=false;
-    const prog = $('srchProg');
-    const step = async () => {
-      if (guard.aborted) return;
-      if (idx>=remaining.length) { if(inFlight===0){ if(!foundAny&&list.children.length===0){ const n=document.createElement('div'); n.className='search-empty'; n.textContent='No matches.'; list.appendChild(n); } progressWrap.remove(); } return; }
-      const file=remaining[idx++]; inFlight++;
-      try {
-        const key=`${state.defaultBranch}:${file.path}`;
-        let text=state.contentCache.get(key);
-        if(!text){
-          const url=`https://raw.githubusercontent.com/${OWNER}/${REPO}/${encodeURIComponent(state.defaultBranch)}/${encodeURI(file.path)}`;
-          const res=await fetch(url);
-          if(res.ok){ const chunks=[]; const reader=res.body.getReader(); let recv=0;
-            while(true){const{done,value}=await reader.read();if(done)break;chunks.push(value);recv+=value.byteLength;if(recv>200*1024)break;}
-            text=new TextDecoder().decode(concatU8(chunks)); state.contentCache.set(key,text); }
+      function render(replacing = false) {
+        const { view, path, q } = parseLocation();
+        document.body.classList.toggle('home', view === 'home');
+        renderSidebar(view, path);
+        renderDownloadAll(view);
+        renderBreadcrumbs(view, path, q);
+        const panelInner = $("panelInner");
+        if (view === "home") {
+          renderHome(panelInner);
+        } else if (view === "browse") {
+          renderFolder(path, panelInner);
+        } else if (view === "file") {
+          renderFile(path, panelInner);
+        } else if (view === "search") {
+          renderSearch(q, panelInner);
+        } else {
+          renderHome(panelInner);
         }
-        if(text&&text.toLowerCase().includes(lower)){
-          foundAny=true;
-          const si=text.toLowerCase().indexOf(lower);
-          const snippet=text.slice(Math.max(0,si-40),Math.min(text.length,si+q.length+40));
-          addResult('file',file.path,snippet);
-        }
-      } catch(e){}
-      finally{
-        inFlight--;
-        const pct=Math.round((Math.min(idx,remaining.length)-inFlight)/remaining.length*100);
-        if(prog) prog.style.width=pct+'%';
-        step();
       }
-    };
-    for(let i=0;i<concurrency&&i<remaining.length;i++) step();
-    if(remaining.length===0) progressWrap.remove();
-  }
 
-  function concatU8(chunks){ const t=chunks.reduce((s,c)=>s+c.byteLength,0); const o=new Uint8Array(t); let off=0; for(const c of chunks){o.set(c,off);off+=c.byteLength;} return o; }
-
-  // ─── PYTHON PARSER ────────────────────────────────────────────────
-  function parsePythonFile(content) {
-    const lines = content.split('\n');
-    let inDoc=false, docType=null, docStart=-1, docContent=[];
-    const docstrings=[];
-    for(let i=0;i<lines.length;i++){
-      const l=lines[i];
-      if(!inDoc){
-        const td=l.indexOf('"""'), ts=l.indexOf("'''");
-        let dt=null, di=-1;
-        if(td!==-1&&(ts===-1||td<ts)){dt='"""';di=td;}
-        else if(ts!==-1){dt="'''";di=ts;}
-        if(dt){
-          inDoc=true;docType=dt;docStart=i;
-          const after=l.substring(di+3);
-          if(after.includes(dt)){const ei=after.indexOf(dt);docstrings.push({start:i,end:i,content:after.substring(0,ei)});inDoc=false;docType=null;}
-          else docContent=[after];
+      function renderBreadcrumbs(view, path, q) {
+        const bc = $("breadcrumbs");
+        bc.innerHTML = "";
+        const add = (label, st) => {
+          const a = document.createElement("a");
+          a.href = "javascript:void(0)";
+          a.textContent = label;
+          a.addEventListener("click", () => navigate(st));
+          bc.appendChild(a);
+        };
+        if (view !== 'home') add("Repo", { view: "browse", p: "" });
+        if (view === "search") {
+          const span = document.createElement("span");
+          span.textContent = ` / Search: ${q}`;
+          bc.appendChild(span);
+          return;
         }
-      } else {
-        const ei=l.indexOf(docType);
-        if(ei!==-1){docContent.push(l.substring(0,ei));docstrings.push({start:docStart,end:i,content:docContent.join('\n')});inDoc=false;docType=null;docContent=[];}
-        else docContent.push(l);
+        const parts = path ? path.split("/") : [];
+        let acc = "";
+        for (let i = 0; i < parts.length; i++) {
+          acc = i === 0 ? parts[0] : `${acc}/${parts[i]}`;
+          const isLast = i === parts.length - 1;
+          const label = ` / ${parts[i]}`;
+          if (!isLast || view === "browse") add(label, { view: "browse", p: acc });
+          else add(label, { view: "file", p: acc });
+        }
       }
-    }
-    const probDoc=docstrings[0]||null;
-    const outDoc=docstrings.length>1?docstrings[docstrings.length-1]:null;
-    const excluded=[];
-    if(probDoc) excluded.push({start:probDoc.start,end:probDoc.end});
-    if(outDoc) excluded.push({start:outDoc.start,end:outDoc.end});
-    let codeLines=[];
-    for(let i=0;i<lines.length;i++){
-      if(!excluded.some(r=>i>=r.start&&i<=r.end)) codeLines.push(lines[i]);
-    }
-    while(codeLines.length&&codeLines[0].trim()==='') codeLines.shift();
-    while(codeLines.length&&codeLines[codeLines.length-1].trim()==='') codeLines.pop();
-    return { problemStatement:probDoc?probDoc.content.trim():null, code:codeLines.join('\n'), output:outDoc?outDoc.content.trim():null };
-  }
 
-  // ─── SYNTAX HIGHLIGHTER ──────────────────────────────────────────
-  function highlightPythonLines(text) {
-    let src = escapeHtml(text);
-    const ph=[]; const put=h=>{const id=`@@T${ph.length}@@`;ph.push(h);return id;};
-    src=src.replace(/((?:"""|''')[\s\S]*?(?:"""|'''|$))/g,m=>put(`<span class="tok-string">${m}</span>`));
-    src=src.replace(/"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/g,m=>put(`<span class="tok-string">${m}</span>`));
-    src=src.replace(/(#.*?$)/gm,(_,p)=>put(`<span class="tok-comment">${p}</span>`));
-    src=src.replace(/(@[_A-Za-z][_\w\.]*)/g,(_,p)=>put(`<span class="tok-decorator">${p}</span>`));
-    const kws=['False','None','True','and','as','assert','async','await','break','class','continue','def','del','elif','else','except','finally','for','from','global','if','import','in','is','lambda','nonlocal','not','or','pass','raise','return','try','while','with','yield'];
-    src=src.replace(new RegExp(`\\b(${kws.join('|')})\\b`,'g'),'<span class="tok-keyword">$1</span>');
-    const bis=['print','range','len','str','int','float','list','dict','set','tuple','bool','enumerate','zip','map','filter','sum','min','max','open','input','type','abs','round','sorted','reversed','any','all'];
-    src=src.replace(new RegExp(`\\b(${bis.join('|')})\\b`,'g'),'<span class="tok-builtin">$1</span>');
-    src=src.replace(/\b(0x[0-9a-fA-F]+|\d+(?:\.\d+)?(?:e[+-]?\d+)?)\b/g,'<span class="tok-number">$1</span>');
-    src=src.replace(/\b(def)(\s+)([_A-Za-z][_\w]*)/g,(_,k,s,n)=>`<span class="tok-keyword">${k}</span>${s}<span class="tok-defname">${n}</span>`);
-    src=src.replace(/\b(class)(\s+)([_A-Za-z][_\w]*)/g,(_,k,s,n)=>`<span class="tok-keyword">${k}</span>${s}<span class="tok-classname">${n}</span>`);
-    src=src.replace(/@@T(\d+)@@/g,(_,i)=>ph[Number(i)]||'');
-    return src.split('\n');
-  }
+      function renderHome(container) {
+        const wrap = document.createElement('div');
+        wrap.className = 'homeWrap';
+        const card = document.createElement('div');
+        card.className = 'homeCard';
+        const title = document.createElement('h1');
+        title.className = 'homeTitle';
+        title.textContent = 'Python Programs';
+        const sub = document.createElement('div');
+        sub.className = 'homeSubtitle';
+        sub.textContent = 'Search problems, files, and code across the repository';
+        const form = document.createElement('form');
+        form.className = 'homeSearchRow';
+        form.setAttribute('id', 'homeSearchForm');
+        form.innerHTML = `
+          <span class="icon" aria-hidden="true">
+            <img src="https://raw.githubusercontent.com/PiyushJT/PiyushJT/a9d7747e25350a58f5bff349735fba8d43a573b5/search.svg" alt="" style="width:22px;height:22px;opacity:.9;" />
+          </span>
+          <input id="homeSearchInput" type="search" placeholder="Search code, problems, files…" autocomplete="off" />
+          <button type="button" class="clearBtn" id="homeClearBtn" aria-label="Clear search">
+            <img src="https://raw.githubusercontent.com/PiyushJT/PiyushJT/190350a5e5b727ddc0cd3557e2d7029305bf5994/icons/cross.svg" alt="X" style="width:22px;height:22px;" />
+          </button>
+        `;
+        const actions = document.createElement('div');
+        actions.className = 'homeActions';
+        
+        const navBtn = document.createElement('button');
+        navBtn.type = 'button';
+        navBtn.className = 'btnPrimary';
+        navBtn.id = 'navigateBtn';
+        navBtn.textContent = 'Navigate Manually';
+        
+        actions.appendChild(navBtn);
+        // (GitHub floating button moved to bottom-right; no in-card button here)
+        // You could add helper actions here if needed.
 
-  // ─── PREFETCH ────────────────────────────────────────────────────
-  async function prefetchSmallFiles() {
-    const candidates=state.fileIndex.slice(0,50); const concurrency=4; let idx=0;
-    const step=async()=>{
-      if(idx>=candidates.length)return;
-      const f=candidates[idx++];
-      try{
-        const key=`${state.defaultBranch}:${f.path}`;
-        if(!state.contentCache.has(key)){
-          const url=`https://raw.githubusercontent.com/${OWNER}/${REPO}/${encodeURIComponent(state.defaultBranch)}/${encodeURI(f.path)}`;
-          const res=await fetch(url);
-          if(res.ok){const chunks=[];const reader=res.body.getReader();let recv=0;while(true){const{done,value}=await reader.read();if(done)break;chunks.push(value);recv+=value.byteLength;if(recv>100*1024)break;}state.contentCache.set(key,new TextDecoder().decode(concatU8(chunks)));}
+        card.appendChild(title);
+        card.appendChild(sub);
+        card.appendChild(form);
+        
+        // Add search button right after the form
+        const searchBtn = document.createElement('button');
+        searchBtn.type = 'button';
+        searchBtn.className = 'btnSearch';
+        searchBtn.style.width = '100%';
+        searchBtn.style.marginTop = '12px';
+        searchBtn.id = 'searchBtn';
+        searchBtn.textContent = 'Search';
+        card.appendChild(searchBtn);
+
+        const divider = document.createElement('div');
+        divider.className = 'homeDivider';
+        const orText = document.createElement('span');
+        orText.className = 'or';
+        orText.textContent = 'OR';
+        divider.appendChild(orText);
+        card.appendChild(divider);
+        card.appendChild(actions);
+        wrap.appendChild(card);
+
+        // MCQ quiz button below the main card
+        const quizWrap = document.createElement('div');
+        quizWrap.className = 'homeQuizWrap';
+        const quizBtn = document.createElement('a');
+        quizBtn.className = 'btnQuiz';
+        quizBtn.href = QUIZ_URL;
+        quizBtn.target = '_blank';
+        quizBtn.rel = 'noopener noreferrer';
+        quizBtn.textContent = 'Practice Python MCQs';
+        quizWrap.appendChild(quizBtn);
+        wrap.appendChild(quizWrap);
+        container.innerHTML = '';
+        container.appendChild(wrap);
+
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const q = document.getElementById('homeSearchInput').value.trim();
+          navigate({ view: 'search', q });
+        });
+        const homeInput = document.getElementById('homeSearchInput');
+        const homeClear = document.getElementById('homeClearBtn');
+        if (homeInput && homeClear) {
+          ['input','change','focus','blur'].forEach(ev => homeInput.addEventListener(ev, () => toggleClear(homeClear, homeInput)));
+          homeClear.addEventListener('click', () => { homeInput.value=''; homeInput.focus(); toggleClear(homeClear, homeInput); });
+          toggleClear(homeClear, homeInput);
         }
-      }catch(e){}finally{step();}
-    };
-    for(let i=0;i<concurrency&&i<candidates.length;i++)step();
-  }
+        document.getElementById('navigateBtn').addEventListener('click', () => {
+          navigate({ view: 'browse', p: '' });
+        });
+        
+        document.getElementById('searchBtn').addEventListener('click', () => {
+          const query = document.getElementById('homeSearchInput').value.trim();
+          if (query) {
+            navigate({ view: 'search', q: query });
+          }
+        });
+      }
 
-  // ─── Activity Bar Switching ───────────────────────────────────────
-  $('actExplorer').addEventListener('click', ()=>{
-    $('actExplorer').classList.add('active');
-    $('actSearch').classList.remove('active');
-    $('explorerPanel').style.display='';
-    $('searchPanel').style.display='none';
-    $('sidebarTitle').textContent='Explorer';
-  });
-  $('actSearch').addEventListener('click', ()=>{
-    $('actSearch').classList.add('active');
-    $('actExplorer').classList.remove('active');
-    $('explorerPanel').style.display='none';
-    $('searchPanel').style.display='flex';
-    $('sidebarTitle').textContent='Search';
-    $('sidebarSearchInput').focus();
-  });
-  $('actGit').addEventListener('click', ()=>{
-    window.open(`https://github.com/${OWNER}/${REPO}`,'_blank','noopener');
-  });
+      function renderFolder(path, container) {
+        const node = state.nodeByPath.get(path || "");
+        if (!node || node.type !== "tree") {
+          navigate({ view: "browse", p: "" }, true);
+          return;
+        }
 
-  // Sidebar search
-  $('sidebarSearchInput').addEventListener('keydown', e=>{
-    if(e.key==='Enter'){ const q=$('sidebarSearchInput').value.trim(); if(q) navigate({view:'search',q}); }
-  });
+        const entries = Array.from(node.children.values());
+        const folders = entries
+          .filter(e => e.type === "tree")
+          .sort((a, b) => a.name.localeCompare(b.name));
+        const files = entries
+          .filter(e => e.type === "blob")
+          .sort((a, b) => a.name.localeCompare(b.name));
 
-  // Title search
-  $('titleSearchInput').addEventListener('keydown', e=>{
-    if(e.key==='Enter'){ const q=$('titleSearchInput').value.trim(); if(q) navigate({view:'search',q}); }
-  });
+        const showFiles = path !== ""; // Only root -> show only folders
 
-  // Collapse sidebar
-  $('collapseBtn').addEventListener('click', ()=>{
-    const sb=$('sidebar');
-    sb.classList.toggle('collapsed');
-  });
+        const list = document.createElement("ul");
+        list.className = "tree";
 
-  window.addEventListener('popstate', ()=>render());
+        function addItem(item, isDir) {
+          const li = document.createElement("li");
+          const iconUrl = iconForPath(item.path, isDir);
+          li.innerHTML = `<span class="icon"><img src="${iconUrl}" alt=""/></span><span>${item.name}</span>`;
+          li.addEventListener("click", () => navigate({ view: isDir ? "browse" : "file", p: item.path }));
+          list.appendChild(li);
+        }
 
-  document.addEventListener('DOMContentLoaded', ()=>{
-    init().catch(err=>{
-      $('editor-content').innerHTML=`<div style="padding:20px;color:#f44747;">Failed to load repository. Check console for details.</div>`;
-      console.error(err);
-      document.body.classList.remove('preinit');
-    });
-  });
-</script>
-</body>
+        folders.forEach(f => addItem(f, true));
+        if (showFiles) files.forEach(f => addItem(f, false));
+
+        container.innerHTML = "";
+        container.appendChild(list);
+      }
+
+      async function renderFile(path, container) {
+        const node = state.nodeByPath.get(path);
+        if (!node || node.type !== "blob") {
+          navigate({ view: "browse", p: "" }, true);
+          return;
+        }
+        const key = `${state.defaultBranch}:${path}`;
+        let fileName = path.split('/').pop().split('.').slice(0, -1).join('.');
+        
+        if (fileName.length > 10) {
+          fileName = fileName.slice(0, 10) + '...';
+        }
+
+        let content = state.contentCache.get(key);
+        if (!content) {
+          const url = `https://raw.githubusercontent.com/${OWNER}/${REPO}/${encodeURIComponent(state.defaultBranch)}/${encodeURI(path)}`;
+          const res = await fetch(url);
+          if (!res.ok) {
+            container.innerHTML = `<div class="viewer"><div class="note">Unable to fetch file.</div></div>`;
+            return;
+          }
+          content = await res.text();
+          state.contentCache.set(key, content);
+        }
+        const viewer = document.createElement("div");
+        viewer.className = "viewer";
+        viewer.innerHTML = `<div class="note">${fileName}</div>`;
+        const toolbar = document.createElement("div");
+        toolbar.className = "toolbar";
+
+        // Determine previous and next program paths (Python files only)
+        let prevPath = null;
+        let nextPath = null;
+        const indexSource = (state.programIndex && state.programIndex.length > 0) ? state.programIndex : state.fileIndex;
+        if (indexSource && indexSource.length > 0) {
+          const currentIndex = indexSource.findIndex(f => f.path === path);
+          if (currentIndex !== -1) {
+            if (currentIndex > 0) {
+              prevPath = indexSource[currentIndex - 1].path;
+            }
+            if (currentIndex < indexSource.length - 1) {
+              nextPath = indexSource[currentIndex + 1].path;
+            }
+          }
+        }
+
+        const copyBtn = document.createElement("button");
+        copyBtn.className = "btn";
+        copyBtn.type = "button";
+        copyBtn.innerHTML = `<span class="ico"><img src="https://raw.githubusercontent.com/PiyushJT/PiyushJT/c91559feee6d399b3e63dbd996d019ae4b7c49f0/icons/copy.svg" style="width:18px;height:18px;opacity:.9;"/></span><span>Copy code</span>`;
+        
+        const isPy = /\.py$/i.test(path);
+        let parsedContent = null;
+        let codeContent = content;
+
+        // Parse Python files to extract problem statement, code, and output
+        if (isPy) {
+          parsedContent = parsePythonFile(content);
+          codeContent = parsedContent.code;
+        }
+
+        copyBtn.addEventListener("click", async () => {
+          // Prevent repeated rapid clicks
+          if (copyBtn.__copiedLock) return;
+          copyBtn.__copiedLock = true;
+          const originalHtml = copyBtn.innerHTML;
+          try {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              await navigator.clipboard.writeText(codeContent);
+            } else {
+              const ta = document.createElement("textarea");
+              ta.value = codeContent;
+              ta.style.position = "fixed";
+              ta.style.opacity = "0";
+              document.body.appendChild(ta);
+              ta.focus();
+              ta.select();
+              document.execCommand("copy");
+            document.body.removeChild(ta);
+            }
+
+            // Show tick icon and 'Copied' text in lime color
+            copyBtn.innerHTML = `<span class="ico"><img src="${TICK_ICON_URL}" style="width:18px;height:18px;opacity:1;"/></span><span style="color:var(--copied-color)">Copied</span>`;
+            copyBtn.disabled = true;
+            setTimeout(() => {
+              copyBtn.innerHTML = originalHtml;
+              copyBtn.disabled = false;
+              copyBtn.__copiedLock = false;
+            }, 2000);
+
+          } catch (_) {
+            copyBtn.textContent = "Failed";
+            copyBtn.__copiedLock = false;
+          }
+        });
+        toolbar.appendChild(copyBtn);
+        viewer.appendChild(toolbar);
+
+        // Add problem statement section for Python files
+        if (isPy && parsedContent && parsedContent.problemStatement) {
+          const problemDiv = document.createElement("div");
+          problemDiv.className = "problem-statement";
+          const problemTitle = document.createElement("div");
+          problemTitle.className = "problem-statement-title";
+          problemTitle.textContent = "Problem Statement";
+          problemDiv.appendChild(problemTitle);
+          const problemText = document.createElement("div");
+          problemText.textContent = parsedContent.problemStatement;
+          problemDiv.appendChild(problemText);
+          viewer.appendChild(problemDiv);
+        }
+
+        const codeBlock = document.createElement("div");
+        codeBlock.className = "codeblock";
+        const lines = isPy ? highlightPythonLines(codeContent) : escapeHtml(codeContent).split("\n");
+        for (let i = 0; i < lines.length; i++) {
+          const row = document.createElement("div");
+          row.className = "code-line";
+          const ln = document.createElement("span");
+          ln.className = "ln";
+          ln.textContent = String(i + 1);
+          const code = document.createElement("span");
+          code.className = "code";
+          code.innerHTML = lines[i] === "" ? "&nbsp;" : lines[i];
+          row.appendChild(ln);
+          row.appendChild(code);
+          codeBlock.appendChild(row);
+        }
+        viewer.appendChild(codeBlock);
+
+        // Add output section for Python files
+        if (isPy && parsedContent && parsedContent.output) {
+          const outputDiv = document.createElement("div");
+          outputDiv.className = "output-section";
+          const outputTitle = document.createElement("div");
+          outputTitle.className = "output-title";
+          outputTitle.textContent = "Output";
+          outputDiv.appendChild(outputTitle);
+          const outputText = document.createElement("div");
+          outputText.textContent = parsedContent.output;
+          outputDiv.appendChild(outputText);
+          viewer.appendChild(outputDiv);
+        }
+        
+        // Navigation row (Prev / Next) below the code block
+        const navRow = document.createElement("div");
+        navRow.className = "navRow";
+
+        const prevBtn = document.createElement("button");
+        prevBtn.className = "btn";
+        prevBtn.type = "button";
+        // Simple left chevron icon for previous
+        prevBtn.innerHTML = `<span class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M15.5 4.5a1 1 0 0 0-1.42 0l-6 6a1 1 0 0 0 0 1.42l6 6a1 1 0 0 0 1.42-1.42L10.91 12l4.59-4.59A1 1 0 0 0 15.5 4.5z"/></svg></span><span>Prev</span>`;
+        if (!prevPath) {
+          prevBtn.disabled = true;
+          prevBtn.style.opacity = "0.4";
+          prevBtn.style.cursor = "default";
+        } else {
+          prevBtn.addEventListener("click", () => {
+            // Use replace navigation so browser back goes to previous context (folder/search),
+            // not through every intermediate program visited via Prev/Next.
+            navigate({ view: "file", p: prevPath }, true);
+          });
+        }
+
+        const nextBtn = document.createElement("button");
+        nextBtn.className = "btn";
+        nextBtn.type = "button";
+        // Text first, simple right chevron icon on the right
+        nextBtn.innerHTML = `<span>Next</span><span class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M8.5 4.5a1 1 0 0 1 1.42 0l6 6a1 1 0 0 1 0 1.42l-6 6a1 1 0 1 1-1.42-1.42L13.09 12 8.5 7.41A1 1 0 0 1 8.5 4.5z"/></svg></span>`;
+        if (!nextPath) {
+          nextBtn.disabled = true;
+          nextBtn.style.opacity = "0.4";
+          nextBtn.style.cursor = "default";
+        } else {
+          nextBtn.addEventListener("click", () => {
+            // Use replace navigation so browser back goes to previous context (folder/search),
+            // not through every intermediate program visited via Prev/Next.
+            navigate({ view: "file", p: nextPath }, true);
+          });
+        }
+
+        navRow.appendChild(prevBtn);
+        navRow.appendChild(nextBtn);
+        viewer.appendChild(navRow);
+        
+        // Add small secondary button at bottom of code block
+        const btnContainer = document.createElement("div");
+        btnContainer.className = "btnContainer";
+        const bottomBtn = document.createElement("a");
+        bottomBtn.className = "btnSmall";
+        bottomBtn.href = `https://github.com/${OWNER}/${REPO}`;
+        bottomBtn.target = "_blank";
+        bottomBtn.rel = "noopener noreferrer";
+        bottomBtn.innerHTML = `<span class="ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M12 .5C5.65.5.5 5.65.5 12.02c0 5.09 3.29 9.4 7.86 10.93.58.11.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.53-1.35-1.3-1.7-1.3-1.7-1.06-.73.08-.72.08-.72 1.17.08 1.78 1.2 1.78 1.2 1.04 1.78 2.74 1.27 3.4.98.11-.75.41-1.26.75-1.55-2.55-.29-5.23-1.28-5.23-5.71 0-1.26.45-2.29 1.2-3.09-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 2.9-.39c.99 0 1.99.13 2.92.39 2.2-1.49 3.17-1.18 3.17-1.18.64 1.59.24 2.77.12 3.06.75.8 1.2 1.83 1.2 3.09 0 4.44-2.69 5.41-5.25 5.69.42.37.8 1.1.8 2.22 0 1.6-.01 2.88-.01 3.27 0 .31.21.68.8.56A10.53 10.53 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg></span><span>Contribute or correct the code</span>`;
+        btnContainer.appendChild(bottomBtn);
+        viewer.appendChild(btnContainer);
+        
+        container.innerHTML = "";
+        container.appendChild(viewer);
+      }
+
+      function escapeHtml(s) {
+        return s
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+      }
+
+      function parsePythonFile(content) {
+        const lines = content.split('\n');
+        let problemStatement = null;
+        let output = null;
+        let codeLines = [];
+        let inDocstring = false;
+        let docstringType = null; // '"""' or "'''"
+        let docstringStart = -1;
+        let docstringContent = [];
+        let firstDocstringFound = false;
+        let outputDocstringIndex = -1;
+        const docstrings = [];
+
+        // First pass: find all docstrings
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i];
+          
+          // Check for start of docstring
+          if (!inDocstring) {
+            const tripleDouble = line.indexOf('"""');
+            const tripleSingle = line.indexOf("'''");
+            
+            if (tripleDouble !== -1) {
+              inDocstring = true;
+              docstringType = '"""';
+              docstringStart = i;
+              const afterStart = line.substring(tripleDouble + 3);
+              if (afterStart.includes('"""')) {
+                // Single line docstring
+                const endIdx = afterStart.indexOf('"""');
+                const content = afterStart.substring(0, endIdx);
+                docstrings.push({
+                  start: i,
+                  end: i,
+                  content: content,
+                  fullLine: line
+                });
+                inDocstring = false;
+                docstringType = null;
+              } else {
+                docstringContent = [afterStart];
+              }
+            } else if (tripleSingle !== -1) {
+              inDocstring = true;
+              docstringType = "'''";
+              docstringStart = i;
+              const afterStart = line.substring(tripleSingle + 3);
+              if (afterStart.includes("'''")) {
+                // Single line docstring
+                const endIdx = afterStart.indexOf("'''");
+                const content = afterStart.substring(0, endIdx);
+                docstrings.push({
+                  start: i,
+                  end: i,
+                  content: content,
+                  fullLine: line
+                });
+                inDocstring = false;
+                docstringType = null;
+              } else {
+                docstringContent = [afterStart];
+              }
+            }
+          } else {
+            // Inside docstring, check for end
+            const endIdx = line.indexOf(docstringType);
+            if (endIdx !== -1) {
+              docstringContent.push(line.substring(0, endIdx));
+              const content = docstringContent.join('\n');
+              docstrings.push({
+                start: docstringStart,
+                end: i,
+                content: content,
+                fullLine: null
+              });
+              inDocstring = false;
+              docstringType = null;
+              docstringContent = [];
+            } else {
+              docstringContent.push(line);
+            }
+          }
+        }
+
+        // Determine problem statement (first docstring)
+        if (docstrings.length > 0) {
+          const firstDoc = docstrings[0];
+          problemStatement = firstDoc.content.trim();
+        }
+
+        // Determine output (last docstring, if different from first)
+        if (docstrings.length > 1) {
+          // Multiple docstrings: first is problem, last is output
+          const lastDoc = docstrings[docstrings.length - 1];
+          // Use the full content of the last docstring as output
+          output = lastDoc.content.trim();
+          outputDocstringIndex = docstrings.length - 1;
+        }
+
+        // Build code lines (excluding problem statement and output docstrings)
+        const excludedRanges = [];
+        if (problemStatement && docstrings.length > 0) {
+          excludedRanges.push({ start: docstrings[0].start, end: docstrings[0].end });
+        }
+        if (output && outputDocstringIndex >= 0) {
+          excludedRanges.push({ start: docstrings[outputDocstringIndex].start, end: docstrings[outputDocstringIndex].end });
+        }
+
+        for (let i = 0; i < lines.length; i++) {
+          let shouldExclude = false;
+          for (const range of excludedRanges) {
+            if (i >= range.start && i <= range.end) {
+              shouldExclude = true;
+              break;
+            }
+          }
+          if (!shouldExclude) {
+            codeLines.push(lines[i]);
+          }
+        }
+
+        // Clean up code lines (remove leading/trailing empty lines)
+        while (codeLines.length > 0 && codeLines[0].trim() === '') {
+          codeLines.shift();
+        }
+        while (codeLines.length > 0 && codeLines[codeLines.length - 1].trim() === '') {
+          codeLines.pop();
+        }
+
+        return {
+          problemStatement: problemStatement,
+          code: codeLines.join('\n'),
+          output: output
+        };
+      }
+
+      function highlightPythonLines(text) {
+        // Escape first
+        let src = escapeHtml(text);
+
+        // Placeholder-based protection to avoid overlapping replacements
+        const placeholders = [];
+        const put = (html) => {
+          const id = `@@T${placeholders.length}@@`;
+          placeholders.push(html);
+          return id;
+        };
+
+        // Triple-quoted strings (multiline)
+        src = src.replace(/((?:"""|''')[\s\S]*?(?:"""|'''|$))/g, (m) => put(`<span class="tok-string">${m}</span>`));
+
+        // Single/double quoted strings
+        src = src.replace(/"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/g, (m) => put(`<span class="tok-string">${m}</span>`));
+
+        // Comments
+        src = src.replace(/(^|\s)(#.*?$)/gm, (m, p1, p2) => `${p1}${put(`<span class=\"tok-comment\">${p2}</span>`)}`);
+
+        // Decorators
+        src = src.replace(/(^|\s)(@[_A-Za-z][_\w\.]*)/gm, (m, p1, p2) => `${p1}${put(`<span class=\"tok-decorator\">${p2}</span>`)}`);
+
+        // Keywords
+        const keywords = [
+          'False','None','True','and','as','assert','async','await','break','class','continue','def','del','elif','else','except','finally','for','from','global','if','import','in','is','lambda','nonlocal','not','or','pass','raise','return','try','while','with','yield'
+        ];
+        const kwRe = new RegExp(`\\b(${keywords.join('|')})\\b`, 'g');
+        src = src.replace(kwRe, '<span class="tok-keyword">$1</span>');
+
+        // Builtins (common subset)
+        const builtins = ['print','range','len','str','int','float','list','dict','set','tuple','bool','enumerate','zip','map','filter','sum','min','max','open'];
+        const biRe = new RegExp(`\\b(${builtins.join('|')})\\b`, 'g');
+        src = src.replace(biRe, '<span class="tok-builtin">$1</span>');
+
+        // Numbers
+        src = src.replace(/\b(0x[0-9a-fA-F]+|\d+(?:\.\d+)?(?:e[+-]?\d+)?)\b/g, '<span class="tok-number">$1</span>');
+
+        // def/class names (run AFTER keyword replacements to avoid touching attributes of inserted spans)
+        src = src.replace(/\b(def)(\s+)([_A-Za-z][_\w]*)/g, (m, kw, sp, name) => `<span class="tok-keyword">${kw}</span>${sp}<span class="tok-defname">${name}</span>`);
+        src = src.replace(/\b(class)(\s+)([_A-Za-z][_\w]*)/g, (m, kw, sp, name) => `<span class="tok-keyword">${kw}</span>${sp}<span class="tok-classname">${name}</span>`);
+
+        // Restore placeholders
+        src = src.replace(/@@T(\d+)@@/g, (_, idx) => placeholders[Number(idx)] || '');
+
+        return src.split('\n');
+      }
+
+      function cancelSearch() {
+        if (state.searchAbort) {
+          state.searchAbort.aborted = true;
+          state.searchAbort = null;
+        }
+      }
+
+      function highlight(text, q) {
+        if (!q) return text;
+        const esc = q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        return text.replace(new RegExp(esc, "gi"), m => `<span class="hl">${m}</span>`);
+      }
+
+      function getBasename(p) {
+        if (!p) return p;
+        const parts = p.split('/');
+        return parts[parts.length - 1];
+      }
+
+      function appendResultItem({ kind, path, snippet }, q, listEl) {
+        const hit = document.createElement("div");
+        hit.className = "hit";
+        const display = highlight(path, q);
+        const sn = snippet ? highlight(snippet, q) : "";
+        hit.innerHTML = `
+          <div class="path">${display}</div>
+          ${sn ? `<div class="snippet" style="color:var(--muted);margin-top:6px;">… ${sn} …</div>` : ""}
+        `;
+        hit.querySelector('.path').addEventListener('click', () => {
+          if (kind === 'folder') navigate({ view: 'browse', p: path });
+          else navigate({ view: 'file', p: path });
+        });
+        listEl.appendChild(hit);
+      }
+
+      async function renderSearch(query, container) {
+        cancelSearch();
+        const guard = { aborted: false };
+        state.searchAbort = guard;
+        const q = (query || "").trim();
+        if (!q) {
+          container.innerHTML = `<div class="empty">Type a query and press Enter. Try <span class="kbd">Program</span> or <span class="kbd">def</span>.</div>`;
+          return;
+        }
+
+        // Single consolidated results list
+        const shell = document.createElement("div");
+        shell.className = "results";
+        const list = document.createElement('div');
+        const progressRow = document.createElement('div');
+        progressRow.className = 'progressRow';
+        progressRow.innerHTML = `<div class="progressBar"><div class="progressFill" id="searchProgress"></div></div><span>Scanning files…</span>`;
+        const progressFill = progressRow.querySelector('#searchProgress');
+        shell.appendChild(progressRow);
+        shell.appendChild(list);
+        container.innerHTML = "";
+        container.appendChild(shell);
+
+        const lower = q.toLowerCase();
+
+        // Folder matches (by folder name only)
+        const folderMatches = Array.from(state.nodeByPath.values())
+          .filter(n => n.type === 'tree' && n.path !== '' && (n.name || getBasename(n.path)).toLowerCase().includes(lower))
+          .sort((a, b) => a.path.localeCompare(b.path));
+        for (const f of folderMatches) appendResultItem({ kind: 'folder', path: f.path, snippet: '' }, q, list);
+
+        // File name matches (by basename only)
+        const nameMatches = state.fileIndex.filter(f => getBasename(f.path).toLowerCase().includes(lower));
+        for (const f of nameMatches) appendResultItem({ kind: 'file', path: f.path, snippet: '' }, q, list);
+
+        // Incremental content matches (exclude already added filename matches)
+        const remaining = state.fileIndex.filter(f => !nameMatches.includes(f));
+        const concurrency = 6;
+        let inFlight = 0; let index = 0; let foundAny = false;
+        const maxContentBytes = 200 * 1024;
+
+        const queueNext = async () => {
+          if (guard.aborted) return;
+          if (index >= remaining.length) {
+            if (inFlight === 0) {
+              if (!foundAny && list.children.length === 0) {
+                const none = document.createElement('div');
+                none.className = 'empty';
+                none.textContent = 'No matches.';
+                list.appendChild(none);
+              }
+              progressRow.remove();
+            }
+            return;
+          }
+          const file = remaining[index++];
+          inFlight++;
+          try {
+            const key = `${state.defaultBranch}:${file.path}`;
+            let text = state.contentCache.get(key);
+            if (!text) {
+              const url = `https://raw.githubusercontent.com/${OWNER}/${REPO}/${encodeURIComponent(state.defaultBranch)}/${encodeURI(file.path)}`;
+              const res = await fetch(url);
+              if (res.ok) {
+                const reader = res.body.getReader();
+                const chunks = [];
+                let received = 0;
+                while (true) {
+                  const { done, value } = await reader.read();
+                  if (done) break;
+                  chunks.push(value);
+                  received += value.byteLength;
+                  if (received > maxContentBytes) break;
+                }
+                const decoder = new TextDecoder("utf-8");
+                text = decoder.decode(concatUint8(chunks));
+                state.contentCache.set(key, text);
+              }
+            }
+            if (text && text.toLowerCase().includes(lower)) {
+              foundAny = true;
+              const idx = text.toLowerCase().indexOf(lower);
+              const start = Math.max(0, idx - 40);
+              const end = Math.min(text.length, idx + q.length + 40);
+              const snippet = text.slice(start, end).replace(/</g, "&lt;");
+              appendResultItem({ kind: 'file', path: file.path, snippet }, q, list);
+            }
+          } catch (e) {
+            // ignore
+          } finally {
+            inFlight--;
+            // Update progress width
+            const processed = Math.min(index, remaining.length) - inFlight;
+            const pct = remaining.length > 0 ? Math.max(0, Math.min(100, Math.round((processed / remaining.length) * 100))) : 100;
+            if (progressFill) progressFill.style.width = pct + '%';
+            queueNext();
+          }
+        };
+        for (let i = 0; i < concurrency && i < remaining.length; i++) queueNext();
+        // If there are no remaining files, remove progress immediately
+        if (remaining.length === 0) progressRow.remove();
+      }
+
+      function concatUint8(chunks) {
+        const total = chunks.reduce((s, c) => s + c.byteLength, 0);
+        const out = new Uint8Array(total);
+        let off = 0;
+        for (const c of chunks) { out.set(c, off); off += c.byteLength; }
+        return out;
+      }
+
+      // renderGroupedHits removed in favor of single list rendering
+
+      async function prefetchSmallFiles() {
+        const candidates = state.fileIndex.slice(0, 50);
+        const concurrency = 4;
+        let index = 0; let inFlight = 0;
+        const maxBytes = 100 * 1024;
+
+        const step = async () => {
+          if (index >= candidates.length) return;
+          const file = candidates[index++];
+          inFlight++;
+          try {
+            const key = `${state.defaultBranch}:${file.path}`;
+            if (!state.contentCache.has(key)) {
+              const url = `https://raw.githubusercontent.com/${OWNER}/${REPO}/${encodeURIComponent(state.defaultBranch)}/${encodeURI(file.path)}`;
+              const res = await fetch(url);
+              if (res.ok) {
+                const reader = res.body.getReader();
+                const chunks = [];
+                let received = 0;
+                while (true) {
+                  const { done, value } = await reader.read();
+                  if (done) break;
+                  chunks.push(value);
+                  received += value.byteLength;
+                  if (received > maxBytes) break;
+                }
+                const decoder = new TextDecoder("utf-8");
+                const text = decoder.decode(concatUint8(chunks));
+                state.contentCache.set(key, text);
+              }
+            }
+          } catch (e) { }
+          finally {
+            inFlight--;
+            step();
+          }
+        };
+        for (let i = 0; i < concurrency && i < candidates.length; i++) step();
+      }
+
+      $("searchForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const q = $("searchInput").value.trim();
+        navigate({ view: "search", q });
+      });
+
+      // Wire custom clear buttons
+      const headerInput = document.getElementById('searchInput');
+      const headerClear = document.getElementById('searchClearBtn');
+      const homeClearSel = '#homeClearBtn';
+      function toggleClear(btn, input) {
+        if (!btn || !input) return;
+        btn.style.display = input.value ? 'inline-flex' : 'none';
+      }
+      if (headerInput && headerClear) {
+        ['input','change','focus','blur'].forEach(ev => headerInput.addEventListener(ev, () => toggleClear(headerClear, headerInput)));
+        headerClear.addEventListener('click', () => { headerInput.value = ''; headerInput.focus(); toggleClear(headerClear, headerInput); });
+        toggleClear(headerClear, headerInput);
+      }
+
+      window.addEventListener("popstate", () => render());
+
+      document.addEventListener("DOMContentLoaded", () => {
+        init().catch(err => {
+          $("panelInner").innerHTML = `<div class="empty">Failed to load repository.</div>`;
+          console.error(err);
+          document.body.classList.remove('preinit');
+        });
+      });
+    </script>
+    <script>
+      // Create floating GitHub FAB that links to the repo, visible only on the home view
+      (function(){
+        try {
+          const wrap = document.createElement('div');
+          wrap.className = 'fabGithubWrap';
+          wrap.style.display = 'none'; // hidden by default
+          const a = document.createElement('a');
+          a.className = 'fabGithub';
+          a.href = `https://github.com/${OWNER}/${REPO}`;
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          a.setAttribute('aria-label', 'View or contribute on GitHub');
+          a.innerHTML = `<svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M12 .5C5.65.5.5 5.65.5 12.02c0 5.09 3.29 9.4 7.86 10.93.58.11.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.53-1.35-1.3-1.7-1.3-1.7-1.06-.73.08-.72.08-.72 1.17.08 1.78 1.2 1.78 1.2 1.04 1.78 2.74 1.27 3.4.98.11-.75.41-1.26.75-1.55-2.55-.29-5.23-1.28-5.23-5.71 0-1.26.45-2.29 1.2-3.09-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 2.9-.39c.99 0 1.99.13 2.92.39 2.2-1.49 3.17-1.18 3.17-1.18.64 1.59.24 2.77.12 3.06.75.8 1.2 1.83 1.2 3.09 0 4.44-2.69 5.41-5.25 5.69.42.37.8 1.1.8 2.22 0 1.6-.01 2.88-.01 3.27 0 .31.21.68.8.56A10.53 10.53 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>`;
+          wrap.appendChild(a);
+          document.body.appendChild(wrap);
+
+          // Helper to toggle visibility based on body.home class
+          const toggle = () => { wrap.style.display = document.body.classList.contains('home') ? '' : 'none'; };
+
+          // Initial toggle
+          toggle();
+
+          // Observe class changes on body to update visibility
+          const obs = new MutationObserver((mutList) => { toggle(); });
+          obs.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+        } catch (e) { /* ignore if DOM not ready */ }
+      })();
+    </script>
+
+    <script>
+      (function () {
+        const header = document.querySelector("header");
+        if (!header) return;
+      
+        const mq = window.matchMedia("(max-width: 980px)");
+        let scroller = null;               // element we listen to for scroll
+        let lastY = 0;
+        let ticking = false;
+        let boundOnScroll = null;
+      
+        // threshold values (px). Tweak if too sensitive.
+        const UP_THRESHOLD = -5;   // negative => scrolling up
+        const DOWN_THRESHOLD = 5;  // positive => scrolling down
+        const MIN_HIDE_SCROLL = 60; // only start hiding after this offset
+      
+        function getScrollTop(el) {
+          // for document / window fallback
+          if (!el) return window.scrollY || document.documentElement.scrollTop || 0;
+          // if it's an element with scrollTop property
+          return (typeof el.scrollTop === "number") ? el.scrollTop : window.scrollY || document.documentElement.scrollTop || 0;
+        }
+      
+        function attachScroller() {
+          // remove previous listener if any
+          if (scroller && boundOnScroll) {
+            try { scroller.removeEventListener("scroll", boundOnScroll, { passive: true }); } catch(e){ }
+            try { window.removeEventListener("scroll", boundOnScroll, { passive: true }); } catch(e){ }
+          }
+        
+          // choose scroller: on mobile use main.content, else use document scrollingElement
+          if (mq.matches) {
+            scroller = document.querySelector("main.content") || document.scrollingElement || document.documentElement;
+          } else {
+            scroller = document.scrollingElement || document.documentElement;
+          }
+        
+          // initialize lastY to avoid a big jump
+          lastY = getScrollTop(scroller);
+        
+          // bound scroll handler so we can remove it later
+          boundOnScroll = () => {
+            if (!ticking) {
+              window.requestAnimationFrame(update);
+              ticking = true;
+            }
+          };
+        
+          // attach to the correct target
+          if (scroller === window || scroller === document.scrollingElement || scroller === document.documentElement) {
+            window.addEventListener("scroll", boundOnScroll, { passive: true });
+          } else {
+            scroller.addEventListener("scroll", boundOnScroll, { passive: true });
+            // also listen to window resize/scroll as a fallback
+            window.addEventListener("scroll", boundOnScroll, { passive: true });
+          }
+        }
+      
+        function update() {
+          const currentY = getScrollTop(scroller);
+          const delta = currentY - lastY;
+        
+          // if not mobile, ensure header visible and exit early
+          if (!mq.matches) {
+            header.style.transform = "translateY(0)";
+            lastY = currentY;
+            ticking = false;
+            return;
+          }
+        
+          // always reveal at top of page to avoid being hidden on initial load
+          if (currentY <= 5) {
+            header.style.transform = "translateY(0)";
+            lastY = currentY;
+            ticking = false;
+            return;
+          }
+        
+          // apply thresholds to avoid flicker from micro-scrolls
+          if (delta > DOWN_THRESHOLD && currentY > MIN_HIDE_SCROLL) {
+            // scrolled down
+            header.style.transform = "translateY(-100%)";
+          } else if (delta < UP_THRESHOLD) {
+            // scrolled up
+            header.style.transform = "translateY(0)";
+          }
+          lastY = currentY;
+          ticking = false;
+        }
+      
+        // watch for breakpoint changes and reattach scroller appropriately
+        function onMediaChange() {
+          attachScroller();
+          // ensure header visible when switching to desktop
+          if (!mq.matches) header.style.transform = "translateY(0)";
+        }
+      
+        // initial attach
+        attachScroller();
+      
+        // media query change handling (modern + fallback)
+        if (typeof mq.addEventListener === "function") {
+          mq.addEventListener("change", onMediaChange);
+        } else if (typeof mq.addListener === "function") {
+          mq.addListener(onMediaChange);
+        }
+      
+        // also reattach on orientation change or resize (some mobile browsers change scroll container)
+        window.addEventListener("orientationchange", () => setTimeout(attachScroller, 120));
+        window.addEventListener("resize", () => setTimeout(attachScroller, 120));
+      })();
+    </script>
+
+
+
+
+  </body>
 </html>
