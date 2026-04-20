@@ -923,7 +923,6 @@
       const OWNER = "dwarkesh777";
       const REPO = "FSD2";
       // TODO: Replace with your actual MCQ quiz site URL if different
-      const QUIZ_URL = "https://dwarkesh777.github.io/PB-MCQ/";
       
       const TICK_ICON_URL = "https://raw.githubusercontent.com/PiyushJT/PiyushJT/main/icons/tick.svg";
 
@@ -1308,19 +1307,7 @@
         card.appendChild(actions);
         wrap.appendChild(card);
 
-        // MCQ quiz button below the main card
-        const quizWrap = document.createElement('div');
-        quizWrap.className = 'homeQuizWrap';
-        const quizBtn = document.createElement('a');
-        quizBtn.className = 'btnQuiz';
-        quizBtn.href = QUIZ_URL;
-        quizBtn.target = '_blank';
-        quizBtn.rel = 'noopener noreferrer';
-        quizBtn.textContent = 'Practice Python MCQs';
-        quizWrap.appendChild(quizBtn);
-        wrap.appendChild(quizWrap);
-        container.innerHTML = '';
-        container.appendChild(wrap);
+      
 
         form.addEventListener('submit', (e) => {
           e.preventDefault();
