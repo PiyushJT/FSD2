@@ -1,0 +1,15 @@
+// Write an express.js script to define 2 pages. 1st page has username
+// and password. Store this username to cookie on 2nd page. Cookie
+// must stay live for 1 day.
+
+var express = require("express")
+var app = express()
+var cp = require("cookie-parser")   
+app.use(cp())
+app.use(express.static(__dirname, { index: 'index12.html' }));
+app.use(express.urlencoded())   
+app.get("/submit", (req, res) => {
+    res.cookie("username", req.query.username, { maxAge: 24 * 60 * 60 * 1000 });
+    res.send("Cookie has been set with username: " + req.query.username);
+})
+app.listen(3010)
