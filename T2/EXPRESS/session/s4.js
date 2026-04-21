@@ -21,25 +21,26 @@ app.use(session({
 }));    
 app.use(express.static(__dirname, { index: 'index11.html' }));
 app.use(express.urlencoded())
-app.post("/submit", (req, res) => {
+app.post("/submit", (req, res,next) => {
     req.session.name = req.body.name;
     req.session.email = req.body.email;
-    req.session.subscription = req.body.subscription === "on";
-    res.redirect("/welcome")
+    next();
 })
-app.get("/welcome", (req, res) => {
+app.post("/submit", (req, res) => {
     const name = req.session.name;
     const email = req.session.email;
     const subscription = req.session.subscription;
     let message = `Welcome ${name}! Your email is ${email}.<br>`;
-    if (subscription) {
+    if (req.body.subscription === "on") {
         message += "Thank you for the subscription!<br><a href='/logout'>Logout</a>";
     }
     else {
         message += "You can subscribe to get daily updates.<br><a href='/subscribe'>Subscribe</a>";
     }   
     res.send(message);
+
 })
+
 app.get("/subscribe", (req, res) => {
     req.session.subscription = true;
     res.send("Thank you for the subscription!<br><a href='/logout'>Logout</a>");
