@@ -3,7 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>FSD2 Programs</title>
+    <title>Python Programs</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/PiyushJT/PiyushJT/refs/heads/main/icon.ico">
+    <link rel="icon" href="https://raw.githubusercontent.com/PiyushJT/PiyushJT/00ca33b80496d6ca543332f53b314e62ddf3e37b/icons/python.svg" type="image/svg+xml">
     <meta name="description" content="Browse and search the PiyushJT/Python-Material GitHub repository">
     <style>
       :root {
@@ -892,7 +894,7 @@
       <header>
         <div class="brand" title="PiyushJT/Python-Material">
             <div class="title">
-                <a class="rootLink" href="https://piyushjt.github.io/Python-Material/">FSD2 Progs</a>
+                <a class="rootLink" href="https://piyushjt.github.io/Python-Material/">Python Progs</a>
             </div>
         </div>
         <form class="search" id="searchForm">
@@ -919,7 +921,7 @@
     </div>
 
     <script>
-const OWNER = "dwarkesh777";
+     const OWNER = "dwarkesh777";
 const REPO = "FSD2";   
       // TODO: Replace with your actual MCQ quiz site URL if different
       const QUIZ_URL = "https://dwarkesh777.github.io/PB-MCQ/";
@@ -1254,7 +1256,7 @@ const REPO = "FSD2";
         card.className = 'homeCard';
         const title = document.createElement('h1');
         title.className = 'homeTitle';
-        title.textContent = 'FSD2 Programs';
+        title.textContent = 'Python Programs';
         const sub = document.createElement('div');
         sub.className = 'homeSubtitle';
         sub.textContent = 'Search problems, files, and code across the repository';
@@ -1307,7 +1309,19 @@ const REPO = "FSD2";
         card.appendChild(actions);
         wrap.appendChild(card);
 
-       
+        // MCQ quiz button below the main card
+        const quizWrap = document.createElement('div');
+        quizWrap.className = 'homeQuizWrap';
+        const quizBtn = document.createElement('a');
+        quizBtn.className = 'btnQuiz';
+        quizBtn.href = QUIZ_URL;
+        quizBtn.target = '_blank';
+        quizBtn.rel = 'noopener noreferrer';
+        quizBtn.textContent = 'Practice Python MCQs';
+        quizWrap.appendChild(quizBtn);
+        wrap.appendChild(quizWrap);
+        container.innerHTML = '';
+        container.appendChild(wrap);
 
         form.addEventListener('submit', (e) => {
           e.preventDefault();
