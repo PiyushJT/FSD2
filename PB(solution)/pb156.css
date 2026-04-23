@@ -1,7 +1,0 @@
-/* Write an express js script to link html , css and js file to show
-message “LJ University with a difference” with font size 50px and
-color “blue”.  */
-.message {
-    font-size: 50px;
-    color: blue;
-}
