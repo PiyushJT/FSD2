@@ -1,0 +1,35 @@
+<!-- Write express js script to perform tasks as asked below.
+1. Create one HTML file which contains two number type input
+fields, one dropdown which contains options to select like (addition,
+subtraction, multiplication, division) and one submit button.
+2. The input fields must contain the value greater than 0 else it will
+give a message “Please enter the valid number”. Also, user must
+select any type of formula from the dropdown else give a message
+“You have not selected any formula”. (Message will be displayed on
+“/calc” page.)
+3. If one formula is selected and numbers are entered then Both
+numbers should be stored in cookies which expires in 50 seconds.
+Respective calculations will be performed on the page “/calc”. -->
+<html>
+
+    <body>
+        <form action="/calc" method="POST">
+            Number 1:
+            <input type="number" id="num1" name="num1" required><br><br>
+
+            Number 2:
+            <input type="number" id="num2" name="num2" required><br><br>
+
+            Operation:
+            <select id="operation" name="operation" required>
+                <option value="">Select Operation</option>
+                <option value="addition">Addition</option>
+                <option value="subtraction">Subtraction</option>
+                <option value="multiplication">Multiplication</option>
+                <option value="division">Division</option>
+            </select><br><br>
+
+            <input type="submit" value="Submit">
+        </form>
+    </body>
+</html>
