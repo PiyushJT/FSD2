@@ -1,0 +1,32 @@
+<!-- Process a form using post method. Form has fields like username,
+password, confirm password, gender, submit and reset buttons. After
+entering all fields, If password and confirm password matches, then
+form should be processed and all relevant and selected fields’ values
+should be printed. Otherwise, by printing warning message in red
+color, it should terminate. No need to write file having form
+elements -->
+<html>
+    <body>
+        <form action="/submit" method="POST">
+            Username:
+            <input type="text" id="username" name="username" required><br><br>
+
+            Password:
+            <input type="password" id="password" name="password" required><br><br>
+
+            Confirm Password:
+            <input type="password" id="confirmPassword" name="confirmPassword" required><br><br>
+
+            Gender:
+            <select id="gender" name="gender" required>
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+            </select><br><br>
+
+            <input type="submit" value="Submit">
+            <input type="reset" value="Reset">
+        </form>
+    </body>
+</html>
