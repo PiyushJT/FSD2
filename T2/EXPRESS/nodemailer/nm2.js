@@ -1,0 +1,1 @@
+// create an html file for response form and this file should loaded on home page field are name email and submoit button once response is submited message thank you for your response will be diplay on page response and also send mail to the enter email id with the submited response 
