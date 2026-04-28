@@ -1,0 +1,22 @@
+<!-- // write a expressJS script to configure to multer midleware performe the following task
+// 1.create a html file named file3.html this file contain heading upload your cv in red color and a form with input type file and submit button 
+// 2.create a js file named file3.js and link this js and html file to browser html file on home page 
+// 3.after uploading a file display message on upload page file orginal name file has been uploaded 
+// 4.set uploaded file  to specific directory named example and file must be stoe in format of cv-timestamp.pdf where cv is the field name -->
+<html>
+<head>
+    <title>Upload Your CV</title>
+    <style>
+        h1 {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Upload Your CV</h1>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="cv" accept=".pdf"><br>
+        <button type="submit">Upload</button>
+    </form>
+</body>
+</html>
