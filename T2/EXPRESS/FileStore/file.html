@@ -1,0 +1,14 @@
+<!-- // Write an express JS to upload file with size limit of 10 MB to a specific directory named Data on the server and in this folder 
+// file must be store in format of lju-file.pdf where LJU is the field name -->
+<html>
+<head>
+    <title>File Upload</title>
+</head>
+<body>
+    <h1>Upload a File</h1>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="LJU" accept="all" >
+        <button type="submit">Upload</button>
+    </form> 
+</body>
+</html>
