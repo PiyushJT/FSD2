@@ -1,0 +1,16 @@
+<!-- // create an html file for response form and this file should loaded on home page field are name email and submoit button once response is submited message thank you for your response will be diplay on page response and also send mail to the enter email id with the submited response  -->
+<html>
+<head>
+    <title>Response Form</title>
+</head>
+<body>
+    <h1>Response Form</h1>
+    <form action="/submit" method="post">
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br><br>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
