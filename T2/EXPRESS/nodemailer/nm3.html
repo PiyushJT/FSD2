@@ -1,0 +1,19 @@
+<!-- Write an Express.js code to send a mail. Create one html file which
+has one email field and one submit button. Fetch the email address
+from email field and send a mail to that email address.
+Mail subject should be “Exam Timetable”. Mail body contains “L J
+University” in h3 tag and display data (Date 21/05/25, Exam name
+FSD-2) in table -->
+<html>
+<head>
+    <title>Send Mail</title>
+</head>
+<body>
+    <h1>Send Mail</h1>
+    <form action="/submit" method="post">
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br><br>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
