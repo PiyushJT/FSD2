@@ -1,0 +1,24 @@
+<!-- // Develop a web application using express and EJS to accept mark to t1,t2,t3,t4  each out of 25 through a form using post method after submiision display all entered mark in a table along with a total mark and determine the result if total mark is 35 or more  pass in green color otherwise fail in red color -->
+<html>
+<head>
+    <title>Student Form</title>
+</head>
+<body>
+    <h1>Enter Student Details</h1>
+
+    <form action="/result1" method="POST">
+        <label>t1:</label>
+        <input type="number" name="t1" min="0" max="25" required><br><br>
+
+        <label>t2:</label>
+        <input type="number" name="t2" min="0" max="25" required><br><br>
+
+        <label>t3:</label>
+        <input type="number" name="t3" min="0" max="25" required><br><br>
+
+        <label>t4:</label>
+        <input type="number" name="t4" min="0" max="25" required><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+</html>

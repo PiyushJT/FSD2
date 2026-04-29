@@ -1,0 +1,48 @@
+<!-- // Develop a web application using express and EJS to accept mark to t1,t2,t3,t4  each out of 25 through a form using post method after submiision display all entered mark in a table along with a total mark and determine the result if total mark is 35 or more  pass in green color otherwise fail in red color -->
+
+<table border="1">
+    <tr>
+        <th>exam</th>
+        <th>marks</th>
+    </tr>
+    <tr>
+        <td>t1</td>
+        <td>
+            <%= t1 %>
+        </td>
+    </tr>
+    <tr>
+        <td>t2</td>
+        <td>
+            <%= t2 %>
+        </td>
+    </tr>
+    <tr>
+        <td>t3</td>
+        <td>
+            <%= t3 %>
+        </td>
+    </tr>
+    <tr>
+        <td>t4</td>
+        <td>
+            <%= t4 %>
+        </td>
+    </tr>
+    <tr>
+        <td>Total</td>
+        <td>
+            <%= total %>
+        </td>
+    </tr>
+    <tr>
+        <td>status</td>
+        <td>
+            <% if (total>= 35) { %>
+                <h4 style="color: green;">PASS</h4>
+                <% } else { %>
+                    <h4 style="color: red;">FAIL</h4>
+                    <% } %>
+        </td>
+    </tr>
+</table>
