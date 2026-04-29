@@ -1,7 +1,14 @@
+<!-- 
+     <%= %>-output the value into the template (HTML escaped)
+     <%- %>-output the unescaped value into the template
+     <%# %>-comment no execution, no output
+     <% %> -Scriptlet tag, for control-flow, no output
+     <%% %> -Outputs a literal '<%' or '%>'
+-->
 <h1>Hello World <br>
-     Welcome to EJS Template Engine <br>
-     This is my first EJS file <br>
+    Welcome to EJS Template Engine <br>
+    This is my first EJS file <br>
     <%= name %> <br>
-    <%= date %> <br>
-    <%= exam %>
+        <%= date %> <br>
+            <%= exam %>
 </h1>
