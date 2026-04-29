@@ -1,0 +1,17 @@
+<!-- // 1.create ejs file contact.ejs that display heding contact form and a form with name email and submit button 
+// 2.render this ejs on the contact route 
+// 3.hendle form submission using the post method on submit route 
+// 4.after form submission display the message on browser thank you "name" we have received your email "email" -->
+<html>
+
+<body>
+    <h1>Contact Form</h1>
+    <form action="/submit" method="post">
+        Name: <br>
+        <input type="text" id="name" name="name" required><br><br>
+        Email: <br>
+        <input type="email" id="email" name="email" required><br><br>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
