@@ -247,6 +247,7 @@
 
       .viewer .btnContainer { display: flex; justify-content: flex-start; }
 
+
       /* ── Code block ── */
       .viewer .codeblock { display: block; }
       .viewer .code-line {
@@ -531,6 +532,7 @@
     <script>
       const OWNER = "dwarkesh777";
       const REPO  = "FSD2";
+      let GITHUB_TOKEN = localStorage.getItem("gh_token") || "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";
       const TICK_ICON_URL = "https://raw.githubusercontent.com/PiyushJT/PiyushJT/main/icons/tick.svg";
 
       const state = {
@@ -563,9 +565,27 @@
         render();
       }
 
-      async function fetchJSON(url,init) {
-        const res = await fetch(url,init);
-        if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
+      async function fetchJSON(url, init) {
+        // Only add Authorization when a token is set — no extra headers
+        // that would trigger a CORS preflight on unauthenticated requests.
+        const opts = { ...(init || {}) };
+        if (GITHUB_TOKEN) {
+          opts.headers = { Authorization: "Bearer " + GITHUB_TOKEN, ...((init || {}).headers || {}) };
+        }
+        let res;
+        try {
+          res = await fetch(url, opts);
+        } catch (netErr) {
+          // fetch() threw — likely CORS preflight failure or network offline
+          throw new Error("Network error — check your internet connection or try disabling browser extensions (" + netErr.message + ")");
+        }
+        if (!res.ok) {
+          const msg = res.status === 401 ? "Bad token (401 Unauthorized)"
+            : res.status === 403 ? "API rate limit exceeded (403) — add a GitHub Personal Access Token to continue"
+            : res.status === 404 ? "Repository not found (404) — double-check the owner/repo name"
+            : "HTTP " + res.status;
+          throw new Error(msg);
+        }
         return res.json();
       }
 
@@ -713,7 +733,13 @@
         const panelInner=$("panelInner");
         if (view==="home") renderHome(panelInner);
         else if (view==="browse") renderFolder(path,panelInner);
-        else if (view==="file") renderFile(path,panelInner);
+        else if (view==="file") {
+          panelInner.innerHTML='<div class="empty" style="padding:20px">Loading file…</div>';
+          renderFile(path,panelInner).catch(err=>{
+            panelInner.innerHTML=`<div class="viewer"><div class="note" style="color:#ff7b72">Error loading file: ${err.message}</div></div>`;
+            console.error("renderFile error:", err);
+          });
+        }
         else if (view==="search") renderSearch(q,panelInner);
         else renderHome(panelInner);
       }
@@ -855,6 +881,7 @@
           } catch(_) { copyBtn.textContent="Failed"; copyBtn.__lock=false; }
         });
         toolbar.appendChild(copyBtn);
+
         viewer.appendChild(toolbar);
 
         if (isPy&&parsedContent?.problemStatement) {
@@ -1121,8 +1148,44 @@
       }
 
       window.addEventListener("popstate",()=>render());
+      function showLoadError(err) {
+        const msg = (err && err.message) ? err.message : String(err);
+        const isRateLimit = msg.includes("403") || msg.toLowerCase().includes("rate limit");
+        const isNotFound  = msg.includes("404");
+        const isBadToken  = msg.includes("401");
+        let hint = "";
+        if (isNotFound)  hint = "The repository <strong>dwarkesh777/FSD2</strong> was not found. It may be <strong>private</strong> — add a GitHub Personal Access Token below to access it.";
+        else if (isRateLimit) hint = "GitHub’s unauthenticated API limit (60 req/hr) was hit. Add a GitHub Personal Access Token below to raise it to 5,000 req/hr.";
+        else if (isBadToken) hint = "The GitHub token was rejected. Please check it and try again.";
+        else hint = "An unexpected error occurred: <code style=\"color:#ff7b72\">" + msg + "</code>";
+
+        $("panelInner").innerHTML =
+          '<div style="padding:28px 24px;max-width:540px;margin:0 auto">' +
+          '<div style="color:#ff7b72;font-size:15px;font-weight:700;margin-bottom:10px">⚠ Failed to load repository</div>' +
+          '<div style="color:#cdd9e5;font-size:13.5px;line-height:1.7;margin-bottom:20px">' + hint + '</div>' +
+          '<div style="margin-bottom:16px">' +
+          '<label style="display:block;font-size:12px;color:#8b949e;margin-bottom:6px;text-transform:uppercase;letter-spacing:.08em">GitHub Personal Access Token (optional)</label>' +
+          '<div style="display:flex;gap:8px">' +
+          '<input id="tokenInput" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" value="' + GITHUB_TOKEN + '" style="flex:1;padding:9px 12px;background:rgba(255,255,255,0.04);color:#e6edf3;border:1px solid rgba(48,54,61,0.8);border-radius:8px;outline:none;font-size:13px"/>' +
+          '<button id="retryBtn" style="padding:9px 16px;background:rgba(88,166,255,0.12);color:#58a6ff;border:1px solid rgba(88,166,255,0.3);border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;white-space:nowrap">Retry ↺</button>' +
+          '</div>' +
+          '<div style="margin-top:7px;font-size:12px;color:#8b949e">Create a token at <a href="https://github.com/settings/tokens/new?scopes=repo&description=FSD2+Viewer" target="_blank" style="color:#58a6ff">github.com/settings/tokens</a> with the <strong>repo</strong> scope. Your token is saved only in this browser.</div>' +
+          '</div></div>';
+
+        document.body.classList.remove('preinit');
+
+        $("retryBtn").addEventListener("click", () => {
+          GITHUB_TOKEN = ($("tokenInput").value || "").trim();
+          if (GITHUB_TOKEN) localStorage.setItem("gh_token", GITHUB_TOKEN);
+          else localStorage.removeItem("gh_token");
+          $("panelInner").innerHTML = '<div class="empty" style="padding:20px">Loading…</div>';
+          document.body.classList.add('preinit');
+          init().catch(e => { showLoadError(e); console.error(e); });
+        });
+      }
+
       document.addEventListener("DOMContentLoaded",()=>{
-        init().catch(err=>{$("panelInner").innerHTML=`<div class="empty">Failed to load repository.</div>`;console.error(err);document.body.classList.remove('preinit');});
+        init().catch(err=>{ showLoadError(err); console.error(err); });
       });
     </script>
 
