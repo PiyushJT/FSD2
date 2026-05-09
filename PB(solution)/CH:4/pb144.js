@@ -19,7 +19,7 @@ app.post("/check", (req, res, next) => {
         res.send("<h1 style='color:red;'>Warning: Invalid username!</h1><a href='/'>Go back</a>");
     }       
 });
-app.post("/check", checkUser, (req, res) => {
+app.post("/check", (req, res) => {
   res.send("<h1>Welcome... admin</h1>");
 });
 app.listen(3000)
