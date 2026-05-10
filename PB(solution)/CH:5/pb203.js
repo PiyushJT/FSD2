@@ -12,7 +12,7 @@
 // Respective calculations will be performed on the page “/calc”.
 var express = require("express")
 var cp = require("cookie-parser")
-var app = express() 
+var app = express.router() 
 app.use(cp())
 app.use(express.static(__dirname, { index: 'pb203.html' }))
 app.use(express.urlencoded())
