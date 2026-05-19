@@ -1,0 +1,10 @@
+/* // write a react code to render a component with following data rander an image hero.png wich is available in accets folder a paragraph in green color and font size 20px use external css for paragraph and display cuurunt time and current date in purple color and it should be center aaligned. */
+.green-paragraph {
+  color: green;
+  font-size: 20px;
+}
+
+.purple-datetime {
+  color: purple;
+  text-align: center;
+}
