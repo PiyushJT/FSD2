@@ -8,7 +8,11 @@ function F1() {
     return (
         <form onSubmit={handleSubmit}>
             Enter your name:
-            <textarea value={name} onChange={(e) => setName(e.target.value)} />
+            {/* <textarea value={name} onChange={(e) => setName(e.target.value)} /> */}
+            <select value={name} onChange={(e) => setName(e.target.value)}>
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+            </select>
             <input type="submit" />
         </form>
     )
