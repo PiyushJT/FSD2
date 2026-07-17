@@ -1,0 +1,40 @@
+// Consider the following collection named student:
+// [
+//  { name: "Rahul", branch: "CSE", marks: 85 },
+//  { name: "Anita", branch: "CE", marks: 72 },
+//  { name: "Vikram", branch: "CSE", marks: 90 },
+//  { name: "Priya", branch: "CE", marks: 65 },
+//  { name: "Arjun", branch: "CSE", marks: 75 }
+// ]
+// Using MongoDB Aggregation Framework, write queries to:
+// 1. Group students by branch and count total students in each branch.
+// 2. Calculate the average marks for each branch.
+// 3. Find the highest marks in each branch.
+// 4. Display only students who scored more than 75 marks.
+// 5. Sort all students by marks in descending order
+
+db.createCollection("student");
+
+db.student.insertMany([
+    { name: "Rahul", branch: "CSE", marks: 85 },
+    { name: "Anita", branch: "CE", marks: 72 },
+    { name: "Vikram", branch: "CSE", marks: 90 },
+    { name: "Priya", branch: "CE", marks: 65 },
+    { name: "Arjun", branch: "CSE", marks: 75 }
+]);
+
+1> db.student.aggregate([
+    { $group: { _id: "$branch", totalStudents: { $sum: 1 } } }
+]);
+
+2> db.student.aggregate([
+    { $group: { _id: "$branch", averageMarks: { $avg: "$marks" } } }
+]); 
+
+3> db.student.aggregate([
+    { $group: { _id: "$branch", highestMarks: { $max: "$marks" } } }
+]);
+
+4> db.student.find({ marks: { $gt: 75 } });
+
+5> db.student.find().sort({ marks: -1 });
