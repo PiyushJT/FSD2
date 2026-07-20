@@ -49,29 +49,35 @@ const createDoc=async()=>
 }
 createDoc();
 
-1> const createIndex=async()=>
+const createIndex=async()=>
 {
     try{
-        const result=await student.collection.createIndex({name:1,age:1});
+        const result=await student.createIndexes({age:1,name:1});
         console.log(result);
+        const ans= await student.find({age:{$gt:15},name:"BBB"}).explain("executionStats");
+        console.log(ans);
     }
     catch(err)
     {
         console.log("Error Occured" + err);
     }
-}
-createIndex();
 
-2> const createIndexSubset=async()=>
+}
+
+const createIndexSubset=async()=>
 {
     try{
-        const result=await student.collection.createIndex({age:1},{partialFilterExpression:{age:{$gt:30}}});
+        const result=await student.collection.createIndex({age:1}).partialFilterExpression({age:{$gt:30}});
         console.log(result);
-    }
+        const ans= await student.find({age:{$gt:30}}).explain("executionStats");
+        console.log(ans);
+    }   
     catch(err)
     {
         console.log("Error Occured" + err);
     }
 }
+
+createIndex();
 createIndexSubset();
 
