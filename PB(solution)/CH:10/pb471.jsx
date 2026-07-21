@@ -2,20 +2,18 @@
 // submitting the form it should be saved in data table inside MongoDB 
 // database named student. -->
 
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import axios from 'axios';
 
 function StudentForm() {
-  const [data, setData] = useState({
-    name: '',
-    rollno: '',
-    totalmarks: ''
-  });
+  const [data, setData] = useState({});
+
+
+  
     const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/students', { 
-name: data.name, rollno: data.rollno, totalmarks: data.totalmarks });
+      const response = await axios.post('http://localhost:3000/students', data);
       console.log(response.data);
       alert('Data inserted successfully');
     }
@@ -27,8 +25,8 @@ name: data.name, rollno: data.rollno, totalmarks: data.totalmarks });
 
     function handleChange(e) {
         const { name, value } = e.target;
-        setData((prevData) => ({
-            ...prevData,
+        setData((data) => ({
+            ...data,
             [name]: value
         }));
     }
